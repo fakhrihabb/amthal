@@ -21,13 +21,13 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // On landing page: transparent when at top, white when scrolled
-  // On other pages: always white
+  // On landing page: invisible when at top, visible when scrolled
+  // On other pages: always visible
   const navClasses = isLandingPage
     ? isScrolled
-      ? 'fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm transition-all duration-300'
-      : 'fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300'
-    : 'fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm';
+      ? 'fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm transition-all duration-300 opacity-100'
+      : 'fixed top-0 left-0 right-0 z-50 bg-transparent transition-all duration-300 opacity-0 pointer-events-none'
+    : 'fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm opacity-100';
 
   const textClasses = isLandingPage && !isScrolled ? 'text-white' : 'text-gray-700';
   const logoTextClasses = isLandingPage && !isScrolled ? 'text-white' : 'gradient-text';
