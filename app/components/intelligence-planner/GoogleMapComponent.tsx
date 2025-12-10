@@ -50,13 +50,13 @@ export default function GoogleMapComponent({ onMapLoad, onMapClick }: GoogleMapC
         scrollwheel: true,
         mapTypeControl: true,
         mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
             position: google.maps.ControlPosition.TOP_RIGHT,
-            mapTypeIds: ['roadmap', 'satellite', 'hybrid'],
+            mapTypeIds: ['roadmap', 'satellite'],
         },
         zoomControl: true,
         streetViewControl: false, // Removed - not relevant for location planning
-        fullscreenControl: true,
+        fullscreenControl: false, // Removed - not needed for this use case
     };
 
     return (
