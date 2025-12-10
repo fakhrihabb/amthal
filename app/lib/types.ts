@@ -38,3 +38,12 @@ export interface Project {
   locations: Location[];
   location_count: number;
 }
+
+export interface ProjectReport {
+  id: string;
+  project_id: string;
+  name: string;
+  storage_path: string;
+  size_bytes: number;
+  created_at: string;
+}

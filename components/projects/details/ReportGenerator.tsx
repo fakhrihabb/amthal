@@ -5,8 +5,9 @@ import { createPortal } from "react-dom";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import html2canvas from "html2canvas";
-import { FileText, Loader2, Download, X } from "lucide-react";
-import { Project, Location } from "../../../app/lib/types";
+import { FileText, Loader2, Download, X, History, Clock } from "lucide-react";
+import { Project, Location, ProjectReport } from "../../../app/lib/types";
+import { ProjectReportsService } from "../../../app/lib/storage";
 
 interface ReportGeneratorProps {
   project: Project;
@@ -43,6 +44,41 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
   // Default: OFF in development, ON in production
   const [includeMaps, setIncludeMaps] = useState(process.env.NODE_ENV === 'production');
   const [mounted, setMounted] = useState(false);
+  const [reports, setReports] = useState<ProjectReport[]>([]);
+  const [isLoadingReports, setIsLoadingReports] = useState(false);
+
+  // Load reports when modal opens
+  useEffect(() => {
+    if (showModal) {
+      loadReports();
+    }
+  }, [showModal, project.id]);
+
+  const loadReports = async () => {
+    setIsLoadingReports(true);
+    try {
+      const data = await ProjectReportsService.getReports(project.id);
+      setReports(data);
+    } catch (error) {
+      console.error("Failed to load reports", error);
+    } finally {
+      setIsLoadingReports(false);
+    }
+  };
+
+  const handleDownloadReport = async (report: ProjectReport) => {
+    try {
+      const url = await ProjectReportsService.getDownloadUrl(report.storage_path);
+      if (url) {
+        window.open(url, '_blank');
+      } else {
+        alert("Gagal membuat link download. Silakan coba lagi.");
+      }
+    } catch (e) {
+      console.error("Download error:", e);
+      alert("Terjadi kesalahan saat mengunduh laporan.");
+    }
+  };
 
   // For client-side portal rendering
   useEffect(() => {
@@ -50,7 +86,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
   }, []);
 
   const generateReport = async (withMaps: boolean) => {
-    setShowModal(false);
+    // 1. Keep modal open
     setIsGenerating(true);
     setReportUrl(null);
 
@@ -365,6 +401,25 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         const result = await response.json();
         const localUrl = URL.createObjectURL(pdfBlob);
         setReportUrl(localUrl);
+
+        // 2. Trigger Auto-Download Immediately
+        const link = document.createElement('a');
+        link.href = localUrl;
+        link.download = `Laporan_Analisis_${project.name.replace(/\s+/g, '_')}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // 3. Upload to Supabase Storage (Background)
+        try {
+          const fileName = `Laporan_Analisis_${project.name.replace(/\s+/g, '_')}_${dateStr.replace(/\s+/g, '-')}.pdf`;
+          await ProjectReportsService.uploadReport(project.id, pdfBlob, fileName);
+          // 4. Refresh reports list
+          await loadReports();
+        } catch (uploadErr) {
+          console.error("Auto-upload failed", uploadErr);
+        }
+
       } else {
         alert("Gagal mengunggah laporan ke server.");
         const localUrl = URL.createObjectURL(pdfBlob);
@@ -408,12 +463,15 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col transform transition-all scale-100">
             
             {/* Header */}
-            <div className="p-5 flex justify-between items-start">
+            <div className="p-5 flex justify-between items-start border-b border-gray-100">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-full bg-blue-50 text-[#134474]">
                   <FileText className="w-6 h-6" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Opsi Laporan</h2>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Opsi Laporan</h2>
+                  <p className="text-xs text-gray-500">Generate PDF baru atau unduh riwayat</p>
+                </div>
               </div>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <X className="w-6 h-6" />
@@ -421,11 +479,56 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
             </div>
 
             {/* Content */}
-            <div className="px-6 pb-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+            <div className="p-0 overflow-y-auto max-h-[60vh]">
+              
+              {/* Historical Reports Section */}
+              <div className="px-6 pt-4">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                  <History className="w-4 h-4 text-brand-primary" /> Riwayat Laporan
+                </h3>
+                
+                {isLoadingReports ? (
+                   <div className="flex justify-center py-4"><Loader2 className="w-5 h-5 animate-spin text-gray-400" /></div>
+                ) : reports.length > 0 ? (
+                  <div className="space-y-2 mb-6">
+                    {reports.map((rpt) => (
+                      <div key={rpt.id} className="flex items-center justify-between p-3 bg-gray-50 hover:bg-white border border-gray-100 hover:border-brand-primary/30 rounded-lg group transition-all">
+                        <div className="flex-1 min-w-0 mr-3">
+                          <p className="text-sm font-medium text-gray-700 truncate" title={rpt.name}>{rpt.name}</p>
+                          <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                            <Clock className="w-3 h-3" />
+                            {new Date(rpt.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                            <span className="mx-1">•</span>
+                            {(rpt.size_bytes / 1024).toFixed(0)} KB
+                          </p>
+                        </div>
+                        <button 
+                          onClick={() => handleDownloadReport(rpt)}
+                          className="p-2 text-brand-primary hover:bg-brand-primary/10 rounded-md transition-colors"
+                          title="Unduh PDF"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4 bg-gray-50 rounded-lg border border-dashed border-gray-200 mb-6">
+                    <p className="text-xs text-gray-400">Belum ada riwayat laporan tersimpan.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="h-px bg-gray-100 mx-6 mb-4"></div>
+
+              {/* Generate New Section */}
+              <div className="px-6 pb-6">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Buat Laporan Baru</h3>
+                
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                 <div>
                   <span className="font-medium text-gray-800">Sertakan Peta Lokasi</span>
-                  <p className="text-sm text-gray-500 mt-0.5">Memerlukan Google Maps API aktif</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Menyertakan gambar peta visual untuk setiap lokasi.</p>
                 </div>
                 {/* Slider Toggle */}
                 <button 
@@ -435,9 +538,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                   <span className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${includeMaps ? 'translate-x-6' : 'translate-x-0'}`} />
                 </button>
               </div>
-              <p className="text-xs text-gray-400 mt-3 text-center">
-                {includeMaps ? "Peta akan disertakan dalam laporan" : "Peta dinonaktifkan (Mode Dev)"}
-              </p>
+              </div>
             </div>
 
             {/* Footer */}
@@ -450,9 +551,11 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
               </button>
               <button
                 onClick={() => generateReport(includeMaps)}
-                className="px-6 py-2 rounded-lg font-semibold text-white shadow-md transition-all active:scale-95 bg-[#134474] hover:bg-[#0D263F]"
+                disabled={isGenerating}
+                className="px-6 py-2 rounded-lg font-semibold text-white shadow-md transition-all active:scale-95 bg-[#134474] hover:bg-[#0D263F] disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                Generate PDF
+                {isGenerating && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isGenerating ? "Generating..." : "Generate & Download"}
               </button>
             </div>
           </div>

@@ -219,3 +219,65 @@ export const SupabaseService = {
     }
   }
 };
+
+export const ProjectReportsService = {
+  uploadReport: async (projectId: string, file: Blob, fileName: string): Promise<void> => {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const safeName = fileName.replace(/[^a-zA-Z0-9]/g, '_');
+    const path = `${projectId}/${timestamp}_${safeName}.pdf`;
+
+    // 1. Upload to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from('projects-report')
+      .upload(path, file, {
+        contentType: 'application/pdf',
+        upsert: false
+      });
+
+    if (uploadError) {
+      console.error('Error uploading report:', uploadError);
+      throw uploadError;
+    }
+
+    // 2. Save metadata to Database
+    const { error: dbError } = await supabase
+      .from('project_reports')
+      .insert([{
+        project_id: projectId,
+        name: fileName,
+        storage_path: path,
+        size_bytes: file.size
+      }]);
+
+    if (dbError) {
+      console.error('Error saving report metadata:', dbError);
+      throw dbError;
+    }
+  },
+
+  getReports: async (projectId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('project_reports')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching reports:', error);
+      return [];
+    }
+    return data || [];
+  },
+
+  getDownloadUrl: async (path: string): Promise<string | null> => {
+    const { data, error } = await supabase.storage
+      .from('projects-report')
+      .createSignedUrl(path, 3600); // 1 hour expiry
+
+    if (error) {
+      console.error('Error generating signed URL:', error);
+      return null;
+    }
+    return data?.signedUrl || null;
+  }
+};
