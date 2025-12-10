@@ -24,6 +24,8 @@ export interface Location {
   analysis?: Analysis; 
   // For UI convenience
   suitability_score?: number; // mapped from analysis.overall_score
+  status?: 'recommended' | 'rejected' | 'pending';
+  notes?: string;
 }
 
 export interface Project {

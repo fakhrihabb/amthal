@@ -199,5 +199,23 @@ export const SupabaseService = {
       console.error('Error removing location:', error);
       throw error;
     }
+  },
+
+  updateLocation: async (id: string, updates: Partial<Location>): Promise<void> => {
+    const allowedUpdates: any = {};
+    if (updates.status !== undefined) allowedUpdates.status = updates.status;
+    if (updates.notes !== undefined) allowedUpdates.notes = updates.notes;
+
+    if (Object.keys(allowedUpdates).length === 0) return;
+
+    const { error } = await supabase
+      .from('locations')
+      .update(allowedUpdates)
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating location:', error);
+      throw error;
+    }
   }
 };

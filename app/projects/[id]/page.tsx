@@ -7,6 +7,8 @@ import { SupabaseService } from "../../lib/storage";
 import { ProjectHeader } from "@/components/projects/details/ProjectHeader";
 import { SummaryStats } from "@/components/projects/details/SummaryStats";
 import { LocationList } from "@/components/projects/details/LocationList";
+import { ComparisonTable } from "@/components/projects/details/ComparisonTable";
+import { ComparisonCharts } from "@/components/projects/details/ComparisonCharts";
 
 export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -14,6 +16,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'list' | 'comparison'>('list');
 
   useEffect(() => {
     fetchProject();
@@ -79,6 +82,24 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
     }
   };
 
+  const handleUpdateLocation = async (locationId: string, updates: Partial<Location>) => {
+    try {
+        await SupabaseService.updateLocation(locationId, updates);
+        // Optimistic update
+        if (project) {
+            setProject({
+                ...project,
+                locations: project.locations.map(l => 
+                    l.id === locationId ? { ...l, ...updates } : l
+                )
+            });
+        }
+    } catch (err) {
+        alert("Gagal memperbarui lokasi.");
+        fetchProject();
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-50">
@@ -114,13 +135,43 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
 
         <SummaryStats project={project} />
 
-        <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
-           <LocationList 
-             locations={project.locations} 
-             onAddLocation={handleAddLocation}
-             onRemoveLocation={handleRemoveLocation}
-           />
+        {/* Tabs */}
+        <div className="flex gap-4 mb-6">
+            <button
+              onClick={() => setActiveTab('list')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'list' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+            >
+               Daftar Detail
+            </button>
+            <button
+              onClick={() => setActiveTab('comparison')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'comparison' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+            >
+               Perbandingan & Analisis
+            </button>
         </div>
+
+        {activeTab === 'list' ? (
+            <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
+               <LocationList 
+                 locations={project.locations} 
+                 onAddLocation={handleAddLocation}
+                 onRemoveLocation={handleRemoveLocation}
+               />
+            </div>
+        ) : (
+            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+               <ComparisonCharts locations={project.locations} />
+               
+               <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
+                  <h3 className="text-xl font-bold text-gray-800 mb-4">Tabel Perbandingan Detail</h3>
+                  <ComparisonTable 
+                    locations={project.locations} 
+                    onUpdateLocation={handleUpdateLocation}
+                  />
+               </div>
+            </div>
+        )}
       </div>
     </main>
   );
