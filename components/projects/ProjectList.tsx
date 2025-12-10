@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Project } from "../../app/lib/types";
-import { LocalStorageService } from "../../app/lib/storage";
+import { LocalStorageService, SupabaseService } from "../../app/lib/storage";
 import { ProjectCard } from "./ProjectCard";
 import { CreateProjectModal } from "./CreateProjectModal";
 import Link from "next/link";
@@ -29,15 +29,65 @@ export const ProjectList = () => {
     filterAndSortProjects();
   }, [projects, searchQuery, sortField, sortOrder]);
 
-  const loadProjects = () => {
-    const data = LocalStorageService.getProjects();
-    setProjects(data);
-    setIsLoading(false);
+  const loadProjects = async () => {
+    // 1. Initial load from LocalStorage for speed
+    const localData = LocalStorageService.getProjects();
+    setProjects(localData);
+    if (localData.length > 0) setIsLoading(false);
+
+    // 2. Fetch from Supabase for truth and syncing
+    try {
+      const remoteData = await SupabaseService.fetchProjects();
+      
+      if (remoteData) {
+        // Merge logic: Create a map by ID
+        // Prefer remote data (server truth) but keep local-only data
+        const mergedMap = new Map<string, Project>();
+        
+        // Add local data first
+        localData.forEach(p => mergedMap.set(p.id, p));
+        
+        // Overwrite with remote data (updates)
+        remoteData.forEach(p => mergedMap.set(p.id, p));
+        
+        const mergedProjects = Array.from(mergedMap.values());
+        setProjects(mergedProjects);
+
+        // Background Sync: Find projects that are in Local but NOT in Remote
+        const missingInRemote = localData.filter(lp => !remoteData.find(rp => rp.id === lp.id));
+        
+        if (missingInRemote.length > 0) {
+          console.log(`Syncing ${missingInRemote.length} projects to Supabase...`);
+          // Sync each one
+          Promise.allSettled(missingInRemote.map(p => SupabaseService.saveProject(p)))
+            .then((results) => {
+               console.log("Sync complete", results);
+               // Optional: Re-fetch to ensure consistency?
+               // For now, the merged state is sufficient
+            });
+        }
+      }
+    } catch (error) {
+      console.error("Supabase fetch failed", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSaveProject = (newProject: Project) => {
+  const handleSaveProject = async (newProject: Project) => {
+    // Optimistic update
     LocalStorageService.saveProject(newProject);
-    loadProjects();
+    const updatedLocal = LocalStorageService.getProjects();
+    setProjects(updatedLocal);
+
+    // Async save to Supabase
+    try {
+      await SupabaseService.saveProject(newProject);
+      // Re-fetch to confirm ID generation if DB generated it (but we generate UUID on client so it's fine)
+    } catch (error) {
+      console.error("Failed to sync project to Supabase", error);
+      alert("Project saved locally but failed to sync to server.");
+    }
   };
 
   const filterAndSortProjects = () => {

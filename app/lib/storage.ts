@@ -1,4 +1,5 @@
 import { Project } from './types';
+import { supabase } from './supabase';
 
 const STORAGE_KEY = 'sivana_projects';
 
@@ -29,10 +30,50 @@ export const LocalStorageService = {
     const newProjects = projects.filter((p) => p.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newProjects));
   },
+};
 
-  // Stub for future Supabase sync
-  syncToSupabase: async (): Promise<void> => {
-    console.log('Syncing to Supabase... (Stub)');
-    // Implement actual sync logic here later
+export const SupabaseService = {
+  fetchProjects: async (): Promise<Project[]> => {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*, locations(count)');
+    
+    if (error) {
+      console.error('Error fetching projects from Supabase:', error);
+      return [];
+    }
+
+    // Map Supabase response to Project interface
+    return (data || []).map((p: any) => ({
+      ...p,
+      locations: [], // Placeholder as we don't fetch full locations list for the project list
+      location_count: p.locations ? p.locations[0]?.count : 0
+    }));
+  },
+
+  saveProject: async (project: Project): Promise<void> => {
+    // Prepare data for insertion (exclude non-column fields)
+    const { locations, location_count, ...projectData } = project;
+    
+    const { error } = await supabase
+      .from('projects')
+      .insert([projectData]);
+      
+    if (error) {
+      console.error('Error saving project to Supabase:', error);
+      throw error;
+    }
+  },
+
+  deleteProject: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', id);
+      
+    if (error) {
+      console.error('Error deleting project from Supabase:', error);
+      throw error;
+    }
   }
 };
