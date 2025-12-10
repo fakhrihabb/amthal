@@ -54,7 +54,7 @@ export const ComparisonCharts = ({ locations }: ComparisonChartsProps) => {
   const colors = ["#2563eb", "#db2777", "#ea580c", "#16a34a", "#9333ea"];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <div id="comparison-charts-container" className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       {/* Bar Chart: Overall Scores */}
       <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
         <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">Perbandingan Skor Total</h3>

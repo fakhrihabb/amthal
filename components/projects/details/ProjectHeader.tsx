@@ -5,6 +5,7 @@ import { ArrowLeft, Edit2, Trash2, Calendar, Target } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { ConfirmationModal } from "./ConfirmationModal";
+import { ReportGenerator } from "./ReportGenerator";
 
 interface ProjectHeaderProps {
   project: Project;
@@ -73,6 +74,8 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
           </div>
 
           <div className="flex items-center gap-3">
+            <ReportGenerator project={project} />
+            
             <button 
               className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-brand-primary transition-colors shadow-sm"
               onClick={() => alert("Edit fitur akan segera hadir via Modal")}
