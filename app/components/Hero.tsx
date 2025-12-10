@@ -38,7 +38,7 @@ export default function Hero() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4, duration: 0.8 }}
-                            className="text-xl md:text-2xl mb-8 text-white/90"
+                            className="text-xl md:text-2xl mb-8 text-white/90 font-bold"
                         >
                             Sistem Intelijen EV untuk Analitik Lokasi SPKLU dan SPBKLU Nasional
                         </motion.p>
@@ -107,21 +107,11 @@ export default function Hero() {
                             </div>
                         </div>
 
-                        {/* Floating Stats Cards */}
+                        {/* Floating Stats Card */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 1, duration: 0.6 }}
-                            className="absolute -bottom-6 -left-6 glass-card p-4 bg-white"
-                        >
-                            <p className="text-sm text-gray-600">Analisis Berbasis AI</p>
-                            <p className="text-2xl font-bold text-[var(--color-blue)]">Gemini</p>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 1.2, duration: 0.6 }}
                             className="absolute -top-6 -right-6 glass-card p-4 bg-white"
                         >
                             <p className="text-sm text-gray-600">Waktu Analisis</p>

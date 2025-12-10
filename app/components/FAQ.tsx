@@ -33,10 +33,6 @@ const faqs = [
         question: 'Format apa yang tersedia untuk laporan?',
         answer: 'Laporan dapat diekspor dalam format PDF yang profesional, lengkap dengan visualisasi peta, analisis, rekomendasi, dan estimasi finansial.',
     },
-    {
-        question: 'Apakah SIVANA tersedia dalam bahasa lain?',
-        answer: 'Untuk versi MVP ini, SIVANA hanya tersedia dalam Bahasa Indonesia. Dukungan multi-bahasa dapat ditambahkan di versi mendatang.',
-    },
 ];
 
 export default function FAQ() {
