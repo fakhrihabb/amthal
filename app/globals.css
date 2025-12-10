@@ -1,13 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors */
+  --color-brand-dark: #0d263f;
+  --color-brand-primary: #134474;
+  --color-brand-light: #276fb0;
+
+  /* Base Colors */
+  --background: #f8fafc;
+  --foreground: #0d263f;
+
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, #0d263f 0%, #134474 100%);
+  --gradient-glass: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-dark: var(--color-brand-dark);
+  --color-brand-primary: var(--color-brand-primary);
+  --color-brand-light: var(--color-brand-light);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -23,4 +40,31 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+@utility glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+@utility glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(19, 68, 116, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(13, 38, 63, 0.05);
+}
+
+@utility btn-primary {
+  background: var(--gradient-brand);
+  color: white;
+  transition: all 0.3s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 12px rgba(19, 68, 116, 0.2);
+  }
 }
