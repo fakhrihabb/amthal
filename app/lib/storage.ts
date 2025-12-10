@@ -1,4 +1,4 @@
-import { Project } from './types';
+import { Project, Location } from './types';
 import { supabase } from './supabase';
 
 const STORAGE_KEY = 'sivana_projects';
@@ -73,6 +73,127 @@ export const SupabaseService = {
       
     if (error) {
       console.error('Error deleting project from Supabase:', error);
+      throw error;
+    }
+  },
+
+  // Task 3.2: New Methods for Project Details
+
+  fetchProjectById: async (id: string): Promise<Project | null> => {
+    // Fetch project with locations and their analysis
+    const { data, error } = await supabase
+      .from('projects')
+      .select(`
+        *,
+        locations (
+          *,
+          analyses (*)
+        )
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching project details:', error);
+      return null;
+    }
+
+    if (!data) return null;
+
+    // Map to Project interface with full location data
+    const locations = (data.locations || []).map((loc: any) => {
+      // Get the latest analysis if exists (assuming one per location for now or take the first)
+      const analysis = loc.analyses && loc.analyses.length > 0 ? loc.analyses[0] : undefined;
+      return {
+        ...loc,
+        analysis,
+        suitability_score: analysis?.overall_score
+      };
+    });
+
+    return {
+      ...data,
+      locations,
+      location_count: locations.length
+    };
+  },
+
+  updateProject: async (id: string, updates: Partial<Project>): Promise<void> => {
+    // Only allow updating specific fields
+    const allowedUpdates = {
+      name: updates.name,
+      description: updates.description,
+      objective: updates.objective,
+      // updated_at is handled by DB trigger usually, but we can pass it if needed
+      updated_at: new Date().toISOString()
+    };
+
+    const { error } = await supabase
+      .from('projects')
+      .update(allowedUpdates)
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error updating project:', error);
+      throw error;
+    }
+  },
+
+  addLocation: async (projectId: string, locationData: Partial<Location>): Promise<any> => {
+    // Separate Location data from Analysis data
+    const { suitability_score, analysis, ...dbLocationData } = locationData;
+
+    // 1. Insert Location
+    const { error: locError, data: locData } = await supabase
+      .from('locations')
+      .insert([{
+        project_id: projectId,
+        ...dbLocationData
+      }])
+      .select()
+      .single();
+
+    if (locError) {
+      console.error('Error adding location:', locError);
+      throw locError;
+    }
+
+    // 2. Insert Analysis (if score provided)
+    // For MVP/Mock: random score means we need an analysis record
+    if (suitability_score !== undefined || analysis) {
+      const { error: anaError } = await supabase
+        .from('analyses')
+        .insert([{
+          location_id: locData.id,
+          overall_score: suitability_score || 0,
+          demand_score: Math.floor(Math.random() * 100), // mocked sub-scores
+          grid_score: Math.floor(Math.random() * 100),
+          accessibility_score: Math.floor(Math.random() * 100),
+          competition_score: Math.floor(Math.random() * 100),
+        }]);
+      
+      if (anaError) {
+        console.error('Error adding analysis for location:', anaError);
+        // Note: Location was added, but analysis failed. 
+        // Ideally we'd use a transaction or cleanup, but for MVP we log it.
+      }
+    }
+
+    // Return with mapped structure for UI
+    return {
+      ...locData,
+      suitability_score: suitability_score
+    };
+  },
+
+  removeLocation: async (locationId: string): Promise<void> => {
+    const { error } = await supabase
+      .from('locations')
+      .delete()
+      .eq('id', locationId);
+
+    if (error) {
+      console.error('Error removing location:', error);
       throw error;
     }
   }
