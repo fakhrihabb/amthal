@@ -75,6 +75,9 @@ export const SupabaseService = {
       console.error('Error deleting project from Supabase:', error);
       throw error;
     }
+
+    // Also remove from local storage to prevent "sync" logic from resurrecting it
+    LocalStorageService.deleteProject(id);
   },
 
   // Task 3.2: New Methods for Project Details

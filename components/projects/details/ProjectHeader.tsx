@@ -4,6 +4,7 @@ import { Project } from "@/app/lib/types";
 import { ArrowLeft, Edit2, Trash2, Calendar, Target } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ConfirmationModal } from "./ConfirmationModal";
 
 interface ProjectHeaderProps {
   project: Project;
@@ -13,14 +14,17 @@ interface ProjectHeaderProps {
 
 export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Todo: Add Edit Modal logic here or parent
 
   const handleDeleteClick = () => {
-    if (confirm("Apakah Anda yakin ingin menghapus proyek ini? Tindakan ini tidak dapat dibatalkan.")) {
-      setIsDeleting(true);
-      onDelete();
-    }
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setIsDeleting(true);
+    onDelete();
   };
 
   return (
@@ -91,6 +95,16 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
           </div>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Hapus Proyek?"
+        message="Apakah Anda yakin ingin menghapus proyek ini? Semua data lokasi dan analisis terkait akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan."
+        confirmText="Hapus Proyek"
+        isDanger={true}
+      />
     </div>
   );
 };
