@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
 
 interface RightSidebarProps {
     isOpen: boolean;
@@ -16,13 +16,13 @@ export default function RightSidebar({ isOpen, onToggle }: RightSidebarProps) {
             {/* Toggle Button */}
             <button
                 onClick={onToggle}
-                className="absolute -left-3 top-4 z-10 w-6 h-6 bg-white border border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
+                className="absolute -left-4 top-4 z-10 w-10 h-10 bg-white border-2 border-[var(--color-light-blue)] rounded-lg flex items-center justify-center hover:bg-[var(--color-light-blue)] hover:text-white transition-all shadow-md hover:shadow-lg group"
                 aria-label={isOpen ? 'Tutup panel hasil' : 'Buka panel hasil'}
             >
                 {isOpen ? (
-                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                    <ChevronRight className="w-5 h-5 text-[var(--color-light-blue)] group-hover:text-white" />
                 ) : (
-                    <ChevronLeft className="w-4 h-4 text-gray-600" />
+                    <ChevronLeft className="w-5 h-5 text-[var(--color-light-blue)] group-hover:text-white" />
                 )}
             </button>
 
@@ -106,8 +106,8 @@ export default function RightSidebar({ isOpen, onToggle }: RightSidebarProps) {
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-4 pt-12">
-                        <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-                            <span className="text-xs text-gray-500">📊</span>
+                        <div className="w-8 h-8 rounded-lg bg-[var(--color-light-blue)]/10 flex items-center justify-center">
+                            <BarChart3 className="w-5 h-5 text-[var(--color-light-blue)]" />
                         </div>
                     </div>
                 )}
