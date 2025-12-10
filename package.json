@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "lucide-react": "^0.559.0",
+    "@googlemaps/google-maps-services-js": "^3.4.2",
+    "@supabase/supabase-js": "^2.87.1",
     "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
