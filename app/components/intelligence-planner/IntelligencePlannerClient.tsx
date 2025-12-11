@@ -27,6 +27,9 @@ export default function IntelligencePlannerClient() {
     const [candidates, setCandidates] = useState<CandidateLocation[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Add candidate mode
+    const [isAddingCandidate, setIsAddingCandidate] = useState(false);
+
     // Selected marker for info window
     const [selectedMarker, setSelectedMarker] = useState<SelectedMarker | null>(null);
 
@@ -56,7 +59,7 @@ export default function IntelligencePlannerClient() {
 
     // Handle map click to add candidate
     const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-        if (e.latLng) {
+        if (e.latLng && isAddingCandidate) {
             const newCandidate: CandidateLocation = {
                 id: `candidate-${Date.now()}`,
                 latitude: e.latLng.lat(),
@@ -66,8 +69,9 @@ export default function IntelligencePlannerClient() {
             };
 
             setCandidates((prev) => [...prev, newCandidate]);
+            setIsAddingCandidate(false); // Reset mode after adding one candidate
         }
-    }, []);
+    }, [isAddingCandidate]);
 
     // Handle delete candidate
     const handleDeleteCandidate = useCallback((id: string) => {
@@ -111,6 +115,8 @@ export default function IntelligencePlannerClient() {
                 layers={layers}
                 onLayerToggle={handleLayerToggle}
                 stationCounts={stationCounts}
+                isAddingCandidate={isAddingCandidate}
+                onToggleAddMode={() => setIsAddingCandidate(!isAddingCandidate)}
             />
 
             {/* Map Container */}

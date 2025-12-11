@@ -13,6 +13,8 @@ interface LeftSidebarProps {
         spbklu: number;
         candidates: number;
     };
+    isAddingCandidate: boolean;
+    onToggleAddMode: () => void;
 }
 
 export default function LeftSidebar({
@@ -21,6 +23,8 @@ export default function LeftSidebar({
     layers,
     onLayerToggle,
     stationCounts,
+    isAddingCandidate,
+    onToggleAddMode,
 }: LeftSidebarProps) {
     return (
         <div
@@ -48,9 +52,24 @@ export default function LeftSidebar({
                             <h2 className="text-lg font-semibold text-gray-800 mb-2">
                                 Kontrol Peta
                             </h2>
-                            <p className="text-sm text-gray-600">
-                                Klik peta untuk menambah lokasi kandidat
-                            </p>
+
+                            {/* Add Candidate Button */}
+                            <button
+                                onClick={onToggleAddMode}
+                                className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${isAddingCandidate
+                                        ? 'bg-orange-500 text-white hover:bg-orange-600'
+                                        : 'bg-[var(--color-light-blue)] text-white hover:opacity-90'
+                                    }`}
+                            >
+                                <Plus className="w-4 h-4" />
+                                {isAddingCandidate ? 'Klik Peta untuk Menambah' : 'Tambah Lokasi Kandidat'}
+                            </button>
+
+                            {isAddingCandidate && (
+                                <p className="text-xs text-orange-600 mt-2 text-center animate-pulse">
+                                    Klik lokasi di peta untuk menambahkan kandidat
+                                </p>
+                            )}
                         </div>
 
                         {/* Layer Toggles */}
