@@ -12,10 +12,10 @@ import { supabase } from '@/app/lib/supabase';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { locationId: string } }
+    { params }: { params: Promise<{ locationId: string }> }
 ) {
     try {
-        const { locationId } = params;
+        const { locationId } = await params;
 
         if (!locationId) {
             return NextResponse.json(
