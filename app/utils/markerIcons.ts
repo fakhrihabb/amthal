@@ -1,19 +1,21 @@
+import { POIType } from '@/app/types/poi';
+
 /**
  * Generate custom marker icons for different station types
  */
 export const getMarkerIcon = (
-    type: 'SPKLU' | 'SPBKLU' | 'CANDIDATE'
+  type: 'SPKLU' | 'SPBKLU' | 'CANDIDATE'
 ): google.maps.Icon => {
-    const colors = {
-        SPKLU: '#0EA5E9', // Blue (brand color)
-        SPBKLU: '#10B981', // Green
-        CANDIDATE: '#F97316', // Orange
-    };
+  const colors = {
+    SPKLU: '#0EA5E9', // Blue (brand color)
+    SPBKLU: '#10B981', // Green
+    CANDIDATE: '#F97316', // Orange
+  };
 
-    const color = colors[type];
+  const color = colors[type];
 
-    // SVG marker with pin shape
-    const svg = `
+  // SVG marker with pin shape
+  const svg = `
     <svg width="32" height="42" viewBox="0 0 32 42" xmlns="http://www.w3.org/2000/svg">
       <path d="M16 0C7.163 0 0 7.163 0 16c0 12 16 26 16 26s16-14 16-26c0-8.837-7.163-16-16-16z" 
             fill="${color}" 
@@ -23,9 +25,28 @@ export const getMarkerIcon = (
     </svg>
   `;
 
-    return {
-        url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
-        scaledSize: new google.maps.Size(32, 42),
-        anchor: new google.maps.Point(16, 42),
-    };
+  return {
+    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+    scaledSize: new google.maps.Size(32, 42),
+    anchor: new google.maps.Point(16, 42),
+  };
+};
+
+/**
+ * Generate POI marker icon with custom color
+ */
+export const getPOIMarkerIcon = (color: string): google.maps.Icon => {
+  // Smaller circular marker for POIs
+  const svg = `
+    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" fill="${color}" stroke="white" stroke-width="2"/>
+      <circle cx="12" cy="12" r="4" fill="white"/>
+    </svg>
+  `;
+
+  return {
+    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+    scaledSize: new google.maps.Size(24, 24),
+    anchor: new google.maps.Point(12, 12),
+  };
 };
