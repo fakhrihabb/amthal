@@ -15,6 +15,7 @@ export interface CandidateLocation {
     longitude: number;
     address: string;
     createdAt: Date;
+    analysisScore?: number; // 0-100, undefined if not analyzed
 }
 
 export interface LayerState {

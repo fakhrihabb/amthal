@@ -133,6 +133,13 @@ export default function IntelligencePlannerClient() {
             // Store analysis results in state
             setAnalysisResults(analysisData);
 
+            // Update candidate with analysis score
+            setCandidates(prev => prev.map(c =>
+                c.id === candidate.id
+                    ? { ...c, analysisScore: analysisData.scores.overall }
+                    : c
+            ));
+
             // Open right sidebar to show results
             setRightSidebarOpen(true);
 

@@ -223,7 +223,7 @@ export default function GoogleMapComponent({
                         <Marker
                             key={candidate.id}
                             position={{ lat: candidate.latitude, lng: candidate.longitude }}
-                            icon={getMarkerIcon('CANDIDATE')}
+                            icon={getMarkerIcon('CANDIDATE', candidate.analysisScore)}
                             title="Lokasi Kandidat"
                             onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
                         />
