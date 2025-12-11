@@ -27,6 +27,7 @@ interface GoogleMapComponentProps {
     onDeleteCandidate: (id: string) => void;
     onAnalyze: () => void;
     mapContainerRef: React.RefObject<HTMLDivElement | null>;
+    isAnalyzing?: boolean;
 }
 
 // @ts-ignore - maps3d is not yet in the type definition for libraries
@@ -47,6 +48,7 @@ export default function GoogleMapComponent({
     onDeleteCandidate,
     onAnalyze,
     mapContainerRef,
+    isAnalyzing = false,
 }: GoogleMapComponentProps) {
     const [map, setMap] = useState<google.maps.Map | null>(null); // 2D Map Instance
     const [map3D, setMap3D] = useState<google.maps.maps3d.Map3DElement | null>(null); // 3D Map Element
@@ -241,6 +243,7 @@ export default function GoogleMapComponent({
                             onAnalyze={onAnalyze}
                             onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
                             onClose={onInfoWindowClose}
+                            isAnalyzing={isAnalyzing}
                         />
                     )}
                 </GoogleMap>
