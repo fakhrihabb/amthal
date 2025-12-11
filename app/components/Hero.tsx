@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Hero() {
     const scrollToNext = () => {
@@ -83,27 +84,15 @@ export default function Hero() {
                         className="relative"
                     >
                         <div className="glass-card p-8 backdrop-blur-xl bg-white/10">
-                            <div className="aspect-square bg-gradient-to-br from-white/20 to-white/5 rounded-2xl flex items-center justify-center">
-                                {/* Placeholder for hero image - you can replace with actual image */}
-                                <div className="text-center text-white">
-                                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
-                                        <svg
-                                            className="w-16 h-16"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <p className="text-lg font-medium">Visualisasi Interaktif</p>
-                                    <p className="text-sm text-white/70 mt-2">2D & 3D Maps</p>
-                                </div>
+                            <div className="aspect-square bg-gradient-to-br from-white/20 to-white/5 rounded-2xl flex items-center justify-center overflow-hidden">
+                                <Image
+                                    src="/branding/hero.png"
+                                    alt="SIVANA - Visualisasi Interaktif 2D & 3D Maps"
+                                    width={500}
+                                    height={500}
+                                    className="w-full h-full object-contain"
+                                    priority
+                                />
                             </div>
                         </div>
 
