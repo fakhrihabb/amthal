@@ -2,6 +2,8 @@
 
 import { ChevronLeft, ChevronRight, Zap, Battery, MapPin, Plus } from 'lucide-react';
 import { LayerState } from '@/app/types/intelligence-planner';
+import { POIFilterState } from '@/app/types/poi';
+import POIFilterPanel from './POIFilterPanel';
 
 interface LeftSidebarProps {
     isOpen: boolean;
@@ -15,6 +17,9 @@ interface LeftSidebarProps {
     };
     isAddingCandidate: boolean;
     onToggleAddMode: () => void;
+    poiFilterState: POIFilterState;
+    onPOIFilterChange: (filterState: POIFilterState) => void;
+    poiCount: number;
 }
 
 export default function LeftSidebar({
@@ -25,6 +30,9 @@ export default function LeftSidebar({
     stationCounts,
     isAddingCandidate,
     onToggleAddMode,
+    poiFilterState,
+    onPOIFilterChange,
+    poiCount,
 }: LeftSidebarProps) {
     return (
         <div
@@ -57,8 +65,8 @@ export default function LeftSidebar({
                             <button
                                 onClick={onToggleAddMode}
                                 className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${isAddingCandidate
-                                        ? 'bg-orange-500 text-white hover:bg-orange-600'
-                                        : 'bg-[var(--color-light-blue)] text-white hover:opacity-90'
+                                    ? 'bg-orange-500 text-white hover:bg-orange-600'
+                                    : 'bg-[var(--color-light-blue)] text-white hover:opacity-90'
                                     }`}
                             >
                                 <Plus className="w-4 h-4" />
@@ -130,6 +138,13 @@ export default function LeftSidebar({
                                 </label>
                             </div>
                         </div>
+
+                        {/* POI Filter Panel */}
+                        <POIFilterPanel
+                            filterState={poiFilterState}
+                            onFilterChange={onPOIFilterChange}
+                            poiCount={poiCount}
+                        />
 
                         {/* Info */}
                         <div className="glass-panel p-4 rounded-lg">

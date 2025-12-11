@@ -1,3 +1,5 @@
+import { POIType } from '@/app/types/poi';
+
 /**
  * Get color for candidate marker based on analysis score
  * @param score - Overall analysis score (0-100), undefined if not analyzed
@@ -57,5 +59,24 @@ export const getMarkerIcon = (
     url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
     scaledSize: new google.maps.Size(32, 42),
     anchor: new google.maps.Point(16, 42),
+  };
+};
+
+/**
+ * Generate POI marker icon with custom color
+ */
+export const getPOIMarkerIcon = (color: string): google.maps.Icon => {
+  // Smaller circular marker for POIs
+  const svg = `
+    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" fill="${color}" stroke="white" stroke-width="2"/>
+      <circle cx="12" cy="12" r="4" fill="white"/>
+    </svg>
+  `;
+
+  return {
+    url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+    scaledSize: new google.maps.Size(24, 24),
+    anchor: new google.maps.Point(12, 12),
   };
 };

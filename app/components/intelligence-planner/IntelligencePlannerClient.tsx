@@ -10,6 +10,8 @@ import {
     LayerState,
     SelectedMarker,
 } from '@/app/types/intelligence-planner';
+import { POIFilterState } from '@/app/types/poi';
+import { DEFAULT_POI_RADIUS } from '@/app/constants/poi-types';
 
 export default function IntelligencePlannerClient() {
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
@@ -20,6 +22,20 @@ export default function IntelligencePlannerClient() {
         spklu: true,
         spbklu: true,
         candidates: true,
+        poi: false, // POI layer starts disabled
+    });
+
+    // POI filter state
+    const [poiFilterState, setPoiFilterState] = useState<POIFilterState>({
+        enabled: false,
+        categories: {
+            shopping_mall: true,
+            university: true,
+            parking: true,
+            rest_stop: true,
+            transit_station: true,
+        },
+        radius: DEFAULT_POI_RADIUS,
     });
 
     // Data state
@@ -89,6 +105,13 @@ export default function IntelligencePlannerClient() {
     // Handle layer toggle
     const handleLayerToggle = useCallback((layer: keyof LayerState) => {
         setLayers((prev) => ({ ...prev, [layer]: !prev[layer] }));
+    }, []);
+
+    // Handle POI filter change
+    const handlePOIFilterChange = useCallback((newFilterState: POIFilterState) => {
+        setPoiFilterState(newFilterState);
+        // Sync POI layer visibility with filter enabled state
+        setLayers((prev) => ({ ...prev, poi: newFilterState.enabled }));
     }, []);
 
     // Handle marker click
@@ -169,6 +192,9 @@ export default function IntelligencePlannerClient() {
                 stationCounts={stationCounts}
                 isAddingCandidate={isAddingCandidate}
                 onToggleAddMode={() => setIsAddingCandidate(!isAddingCandidate)}
+                poiFilterState={poiFilterState}
+                onPOIFilterChange={handlePOIFilterChange}
+                poiCount={0} // Will be updated when POIs are loaded
             />
 
             {/* Map Container */}
@@ -185,6 +211,8 @@ export default function IntelligencePlannerClient() {
                     onAnalyze={handleAnalyze}
                     mapContainerRef={mapContainerRef}
                     isAnalyzing={isAnalyzing}
+                    poiFilterState={poiFilterState}
+                    onPOIFilterChange={handlePOIFilterChange}
                 />
                 {loading && (
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-md">

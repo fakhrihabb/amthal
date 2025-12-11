@@ -1,3 +1,5 @@
+import { POI } from './poi';
+
 export interface Station {
     id: string;
     name: string;
@@ -22,9 +24,10 @@ export interface LayerState {
     spklu: boolean;
     spbklu: boolean;
     candidates: boolean;
+    poi: boolean;
 }
 
 export interface SelectedMarker {
-    type: 'station' | 'candidate';
-    data: Station | CandidateLocation;
+    type: 'station' | 'candidate' | 'poi';
+    data: Station | CandidateLocation | POI;
 }
