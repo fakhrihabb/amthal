@@ -17,8 +17,10 @@ export const ProjectMap = ({ locations, onLocationSelect, selectedLocationId }: 
   const mapRef = useRef<google.maps.Map | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
 
+
   // Use shared Google Maps loader from provider
   const { isLoaded, loadError } = useGoogleMaps();
+
 
   // Center on last added location, or default to Jakarta if no locations
   const defaultCenter = useMemo(() => {
