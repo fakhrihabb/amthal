@@ -82,7 +82,7 @@ export default function SearchBar({
     }, []);
 
     return (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md px-4">
+        <div className="absolute top-4 left-4 z-10 w-full max-w-md">
             <Autocomplete
                 onLoad={handleLoad}
                 onPlaceChanged={handlePlaceChanged}

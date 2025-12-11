@@ -16,6 +16,7 @@ import { PlacesService } from '@/app/services/places-api';
 import StationInfoWindow from './StationInfoWindow';
 import CandidateInfoWindow from './CandidateInfoWindow';
 import POIInfoWindow from './POIInfoWindow';
+import SearchBar from './SearchBar';
 import LocationSelectionPanel from './LocationSelectionPanel';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
@@ -272,10 +273,13 @@ export default function GoogleMapComponent({
 
     return (
         <>
-            {/* 3D Toggle Button */}
+            {/* Search Bar - Top Left */}
+            <SearchBar onLocationSelect={handleSearchSelect} />
+
+            {/* 3D Toggle Button - Bottom Left */}
             <View3DToggle is3DMode={is3DMode} onToggle={toggle3DMode} />
 
-            {/* Screenshot Button */}
+            {/* Screenshot Button - Bottom Left (below 3D toggle) */}
             <ScreenshotButton mapContainerRef={mapContainerRef} />
 
             {/* Location Selection Panel */}

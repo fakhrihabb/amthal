@@ -13,12 +13,10 @@ import {
 import { POIFilterState } from '@/app/types/poi';
 import { DEFAULT_POI_RADIUS } from '@/app/constants/poi-types';
 import { getGeocodingService } from '@/app/services/geocoding-api';
-import { useSearchContext } from '../LayoutContent';
 
 export default function IntelligencePlannerClient() {
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(true);
     const [rightSidebarOpen, setRightSidebarOpen] = useState(true);
-    const { setSearchHandler } = useSearchContext();
 
     // Layer visibility state
     const [layers, setLayers] = useState<LayerState>({
@@ -160,11 +158,6 @@ export default function IntelligencePlannerClient() {
         console.log('Navigate to candidate:', candidate);
         // The actual centering will be handled in GoogleMapComponent via a new prop
     }, []);
-
-    // Register search handler with context
-    useEffect(() => {
-        setSearchHandler(handleSearchLocationSelect);
-    }, [setSearchHandler, handleSearchLocationSelect]);
 
     // Calculate station counts
     const stationCounts = {
