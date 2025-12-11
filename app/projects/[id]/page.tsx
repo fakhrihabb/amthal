@@ -9,6 +9,9 @@ import { SummaryStats } from "@/components/projects/details/SummaryStats";
 import { LocationList } from "@/components/projects/details/LocationList";
 import { ComparisonTable } from "@/components/projects/details/ComparisonTable";
 import { ComparisonCharts } from "@/components/projects/details/ComparisonCharts";
+import { HistoryTimeline } from "@/components/projects/details/HistoryTimeline";
+import { ProjectMap } from "@/components/projects/details/ProjectMap";
+import { TeamNotesFloating } from "@/components/projects/details/TeamNotesFloating";
 
 export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -17,11 +20,12 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   
   // Initialize tab from URL or default to 'list'
-  const activeTab = searchParams.get('tab') === 'comparison' ? 'comparison' : 'list';
+  const activeTab = (searchParams.get('tab') || 'list') as 'list' | 'comparison' | 'history';
 
-  const setActiveTab = (tab: 'list' | 'comparison') => {
+  const setActiveTab = (tab: 'list' | 'comparison' | 'history') => {
       // Update URL without refreshing
       router.push(`/projects/${id}?tab=${tab}`, { scroll: false });
   };
@@ -157,17 +161,43 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
             >
                Perbandingan & Analisis
             </button>
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'history' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+            >
+               Riwayat Aktivitas
+            </button>
         </div>
 
-        {activeTab === 'list' ? (
-            <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
-               <LocationList 
-                 locations={project.locations} 
-                 onAddLocation={handleAddLocation}
-                 onRemoveLocation={handleRemoveLocation}
-               />
+        {activeTab === 'list' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start animate-in fade-in slide-in-from-bottom-4 duration-500">
+               {/* Map View - Takes 7 cols on large screens */}
+               <div className="lg:col-span-7 h-[600px] bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-4">
+                  <ProjectMap 
+                    locations={project.locations} 
+                    selectedLocationId={selectedLocationId}
+                    onLocationSelect={setSelectedLocationId}
+                  />
+               </div>
+
+               {/* List View - Takes 5 cols */}
+               <div className="lg:col-span-5 space-y-4">
+                 <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
+                    <div className="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                        <LocationList 
+                          locations={project.locations} 
+                          onAddLocation={handleAddLocation}
+                          onRemoveLocation={handleRemoveLocation}
+                          selectedLocationId={selectedLocationId}
+                          onSelectLocation={setSelectedLocationId}
+                        />
+                    </div>
+                 </div>
+               </div>
             </div>
-        ) : (
+        )}
+
+        {activeTab === 'comparison' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                <ComparisonCharts locations={project.locations} />
                
@@ -180,6 +210,15 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                </div>
             </div>
         )}
+
+        {activeTab === 'history' && (
+            <div className="h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-500">
+               <HistoryTimeline projectId={project.id} />
+            </div>
+        )}
+
+        {/* Floating Notes Widget */}
+        <TeamNotesFloating projectId={project.id} />
       </div>
     </main>
   );
