@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import { X, MapPin, Loader2, Globe } from "lucide-react";
+import { X, MapPin, Loader2, Globe, Info } from "lucide-react";
 import { Location } from "@/app/lib/types";
 
 const containerStyle = {
@@ -169,6 +169,19 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-4">
+
+          {/* Info Alert */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
+             <div className="p-1.5 bg-blue-100 rounded-full shrink-0">
+               <Info className="w-4 h-4 text-blue-700" />
+             </div>
+             <div>
+               <p className="text-sm text-blue-800 font-medium">Tips: Gunakan Intelligence Planner</p>
+               <p className="text-sm text-blue-600 mt-1 leading-relaxed">
+                 Fitur ini hanya untuk penyimpanan manual tanpa analisis. Untuk hasil terbaik dengan skor dan rekomendasi AI, gunakan <a href="/intelligence-planner" className="underline font-semibold hover:text-blue-900">Intelligence Planner</a>.
+               </p>
+             </div>
+          </div>
           
           {/* Form Fields */}
           <div className="space-y-3">

@@ -10,9 +10,11 @@ interface LocationListProps {
   locations: Location[];
   onAddLocation: (data: Partial<Location>) => void;
   onRemoveLocation: (id: string) => void;
+  onSelectLocation?: (id: string) => void;
+  selectedLocationId?: string | null;
 }
 
-export const LocationList = ({ locations, onAddLocation, onRemoveLocation }: LocationListProps) => {
+export const LocationList = ({ locations, onAddLocation, onRemoveLocation, onSelectLocation, selectedLocationId }: LocationListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -32,14 +34,23 @@ export const LocationList = ({ locations, onAddLocation, onRemoveLocation }: Loc
           className="flex items-center gap-2 px-4 py-2 btn-primary rounded-lg text-sm font-semibold shadow-md active:scale-95"
         >
           <Plus className="w-4 h-4" />
-          Tambah Lokasi
+          Tambah Lokasi Manual
         </button>
       </div>
 
       {locations && locations.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           {locations.map((location) => (
-            <div key={location.id} className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all group relative overflow-hidden">
+            <div 
+              key={location.id} 
+              onClick={() => onSelectLocation && onSelectLocation(location.id)}
+              className={`
+                border rounded-xl p-4 transition-all group relative overflow-hidden cursor-pointer
+                ${selectedLocationId === location.id 
+                  ? 'bg-[#F2F7FB] border-[#134474] border-2 shadow-md' 
+                  : 'bg-white border-gray-200 hover:shadow-md hover:border-gray-300'}
+              `}
+            >
                {/* Score Badge */}
                <div className="absolute top-4 right-4 z-10">
                  <div className={`
