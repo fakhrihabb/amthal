@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ChevronLeft, ChevronRight, BarChart3, Save } from 'lucide-react';
+import { ChevronLeft, ChevronRight, BarChart3, Save, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { SaveToProjectModal } from '@/components/projects/SaveToProjectModal';
 import { Location, Analysis } from '@/app/lib/types';
@@ -9,24 +9,17 @@ import { Location, Analysis } from '@/app/lib/types';
 interface RightSidebarProps {
     isOpen: boolean;
     onToggle: () => void;
+    analysisResults?: any | null;
+    isAnalyzing?: boolean;
 }
 
-export default function RightSidebar({ isOpen, onToggle }: RightSidebarProps) {
+export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnalyzing }: RightSidebarProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Placeholder data until fully integrated with Analysis Engine
-    const mockLocation: Partial<Location> = {
-        name: "Lokasi Analisis AI",
-        address: "Jl. Jend. Sudirman, Jakarta",
-        latitude: -6.2088,
-        longitude: 106.8456
-    };
-
-    const mockAnalysis: Partial<Analysis> = {
-        overall_score: 85,
-        recommendation: "Sangat Direkomendasikan untuk Fast Charging",
-        insights_text: "Lokasi memiliki kepadatan lalu lintas tinggi dan akses mudah."
-    };
+    // Extract data from analysis results
+    const scores = analysisResults?.scores;
+    const insights = analysisResults?.insights;
+    const recommendation = analysisResults?.recommendation;
 
     return (
         <div
@@ -56,70 +49,120 @@ export default function RightSidebar({ isOpen, onToggle }: RightSidebarProps) {
                                     Hasil Analisis
                                 </h2>
                                 <p className="text-sm text-gray-600">
-                                    Hasil analisis lokasi akan ditampilkan di sini.
+                                    {analysisResults ? 'Hasil analisis lokasi telah selesai.' : 'Hasil analisis lokasi akan ditampilkan di sini.'}
                                 </p>
                             </div>
 
-                            {/* Placeholder for analysis results */}
-                            <div className="glass-panel p-4 rounded-lg">
-                                <h3 className="text-sm font-medium text-gray-700 mb-3">
-                                    Skor Kesesuaian
-                                </h3>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-gray-600">Permintaan</span>
-                                        <span className="text-xs font-medium text-gray-400">-</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-gray-600">Grid</span>
-                                        <span className="text-xs font-medium text-gray-400">-</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-gray-600">Aksesibilitas</span>
-                                        <span className="text-xs font-medium text-gray-400">-</span>
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-xs text-gray-600">Kompetisi</span>
-                                        <span className="text-xs font-medium text-gray-400">-</span>
-                                    </div>
-                                    <div className="border-t pt-2 mt-2">
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-sm font-medium text-gray-700">Total</span>
-                                            <span className="text-sm font-bold text-gray-400">-</span>
+                            {isAnalyzing && (
+                                <div className="glass-panel p-6 rounded-lg flex flex-col items-center justify-center">
+                                    <Loader2 className="w-8 h-8 animate-spin text-[var(--color-light-blue)] mb-2" />
+                                    <p className="text-sm text-gray-600">Menganalisis lokasi...</p>
+                                </div>
+                            )}
+
+                            {!isAnalyzing && scores && (
+                                <>
+                                    {/* Scores Section */}
+                                    <div className="glass-panel p-4 rounded-lg">
+                                        <h3 className="text-sm font-medium text-gray-700 mb-3">
+                                            Skor Kesesuaian
+                                        </h3>
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-600">Permintaan</span>
+                                                <span className={`text-xs font-medium ${scores.demand >= 70 ? 'text-green-600' : scores.demand >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                    {scores.demand}/100
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-600">Grid</span>
+                                                <span className={`text-xs font-medium ${scores.grid >= 70 ? 'text-green-600' : scores.grid >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                    {scores.grid}/100
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-600">Aksesibilitas</span>
+                                                <span className={`text-xs font-medium ${scores.accessibility >= 70 ? 'text-green-600' : scores.accessibility >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                    {scores.accessibility}/100
+                                                </span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-600">Kompetisi</span>
+                                                <span className={`text-xs font-medium ${scores.competition >= 70 ? 'text-green-600' : scores.competition >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                    {scores.competition}/100
+                                                </span>
+                                            </div>
+                                            <div className="border-t pt-2 mt-2">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm font-medium text-gray-700">Total</span>
+                                                    <span className={`text-lg font-bold ${scores.overall >= 70 ? 'text-green-600' : scores.overall >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                                        {scores.overall}/100
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    {/* AI Insights */}
+                                    {insights && (
+                                        <div className="glass-panel p-4 rounded-lg">
+                                            <h3 className="text-sm font-medium text-gray-700 mb-2">
+                                                Wawasan AI
+                                            </h3>
+                                            <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                                                {insights}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Recommendation */}
+                                    {recommendation && (
+                                        <div className="glass-panel p-4 rounded-lg">
+                                            <h3 className="text-sm font-medium text-gray-700 mb-2">
+                                                Rekomendasi
+                                            </h3>
+                                            <div className="mb-3">
+                                                <span className="inline-block px-3 py-1 bg-[var(--color-light-blue)] text-white text-xs font-medium rounded-full">
+                                                    {recommendation.type}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs text-gray-600 mb-3">
+                                                {recommendation.rationale}
+                                            </p>
+                                            {recommendation.technical_specs && (
+                                                <div className="text-xs text-gray-500 space-y-1">
+                                                    <p><strong>Chargers:</strong> {recommendation.technical_specs.chargers || '-'}</p>
+                                                    <p><strong>Power:</strong> {recommendation.technical_specs.powerRequirement || '-'}</p>
+                                                    <p><strong>Space:</strong> {recommendation.technical_specs.spaceRequirement || '-'}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+
+                            {!isAnalyzing && !analysisResults && (
+                                <div className="glass-panel p-6 rounded-lg text-center">
+                                    <BarChart3 className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                                    <p className="text-sm text-gray-500">
+                                        Klik marker kandidat dan pilih "Analisis" untuk memulai
+                                    </p>
                                 </div>
-                            </div>
-
-                            <div className="glass-panel p-4 rounded-lg">
-                                <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                    Wawasan AI
-                                </h3>
-                                <p className="text-xs text-gray-500">
-                                    Penjelasan berbasis AI tentang lokasi yang dipilih akan muncul di sini.
-                                </p>
-                            </div>
-
-                            <div className="glass-panel p-4 rounded-lg">
-                                <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                    Rekomendasi
-                                </h3>
-                                <p className="text-xs text-gray-500">
-                                    Rekomendasi infrastruktur (SPKLU/SPBKLU) dan spesifikasi teknis akan ditampilkan di sini.
-                                </p>
-                            </div>
+                            )}
                         </div>
 
                         {/* Save Actions */}
-                        <div className="pt-4 border-t border-gray-100 bg-white">
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="w-full px-4 py-3 bg-[#134474] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#0D263F] transition-all shadow-md active:scale-95"
-                            >
-                                <Save className="w-4 h-4" />
-                                Simpan ke Proyek
-                            </button>
-                        </div>
+                        {analysisResults && (
+                            <div className="pt-4 border-t border-gray-100 bg-white">
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="w-full px-4 py-3 bg-[#134474] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#0D263F] transition-all shadow-md active:scale-95"
+                                >
+                                    <Save className="w-4 h-4" />
+                                    Simpan ke Proyek
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-4 pt-12">
@@ -129,12 +172,12 @@ export default function RightSidebar({ isOpen, onToggle }: RightSidebarProps) {
                     </div>
                 )}
             </div>
-            
-            <SaveToProjectModal 
+
+            <SaveToProjectModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                locationData={mockLocation}
-                analysisData={mockAnalysis}
+                locationData={analysisResults?.location}
+                analysisData={analysisResults}
             />
         </div>
     );

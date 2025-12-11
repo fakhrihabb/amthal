@@ -49,6 +49,10 @@ export default function IntelligencePlannerClient() {
     // Selected marker for info window
     const [selectedMarker, setSelectedMarker] = useState<SelectedMarker | null>(null);
 
+    // Analysis results state
+    const [analysisResults, setAnalysisResults] = useState<any | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+
     // Map container ref for screenshot
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -120,10 +124,55 @@ export default function IntelligencePlannerClient() {
         setSelectedMarker(null);
     }, []);
 
-    // Handle analyze (placeholder for Task 1.7)
-    const handleAnalyze = useCallback(() => {
-        console.log('Analyze clicked - will be implemented in Task 1.7');
-    }, []);
+    // Handle analyze - call backend API
+    const handleAnalyze = useCallback(async () => {
+        if (!selectedMarker || selectedMarker.type !== 'candidate') return;
+
+        const candidate = selectedMarker.data as CandidateLocation;
+
+        setIsAnalyzing(true);
+        try {
+            console.log('Analyzing location:', candidate.address);
+
+            const response = await fetch('/api/analyze-location-complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    latitude: candidate.latitude,
+                    longitude: candidate.longitude,
+                    address: candidate.address,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Analysis failed');
+            }
+
+            const analysisData = await response.json();
+            console.log('Analysis complete:', analysisData);
+
+            // Store analysis results in state
+            setAnalysisResults(analysisData);
+
+            // Update candidate with analysis score
+            setCandidates(prev => prev.map(c =>
+                c.id === candidate.id
+                    ? { ...c, analysisScore: analysisData.scores.overall }
+                    : c
+            ));
+
+            // Open right sidebar to show results
+            setRightSidebarOpen(true);
+
+        } catch (error) {
+            console.error('Error analyzing location:', error);
+            alert('Gagal menganalisis lokasi. Silakan coba lagi.');
+        } finally {
+            setIsAnalyzing(false);
+        }
+    }, [selectedMarker]);
 
     // Calculate station counts
     const stationCounts = {
@@ -161,6 +210,7 @@ export default function IntelligencePlannerClient() {
                     onDeleteCandidate={handleDeleteCandidate}
                     onAnalyze={handleAnalyze}
                     mapContainerRef={mapContainerRef}
+                    isAnalyzing={isAnalyzing}
                     poiFilterState={poiFilterState}
                     onPOIFilterChange={handlePOIFilterChange}
                 />
@@ -175,6 +225,8 @@ export default function IntelligencePlannerClient() {
             <RightSidebar
                 isOpen={rightSidebarOpen}
                 onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
+                analysisResults={analysisResults}
+                isAnalyzing={isAnalyzing}
             />
         </div>
     );

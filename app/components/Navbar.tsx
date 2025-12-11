@@ -37,11 +37,11 @@ export default function Navbar() {
       <div className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <span className="text-white font-bold text-xl">S</span>
-            </div>
-            <span className={`text-xl font-bold ${logoTextClasses}`}>SIVANA</span>
+          <Link href="/" className="flex items-center gap-1">
+            {/* Logo SVG */}
+            <img src="/branding/logo.svg" alt="SIVANA Logo" className="h-10 w-10" />
+            {/* Text */}
+            <span className={`text-2xl font-extrabold italic ${logoTextClasses}`} style={{ fontFamily: 'Inter, sans-serif' }}>SIVANA</span>
           </Link>
 
           {/* Navigation Links */}
@@ -49,8 +49,8 @@ export default function Navbar() {
             <Link
               href="/intelligence-planner"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${isActive('/intelligence-planner')
-                  ? 'bg-[var(--color-light-blue)] text-white'
-                  : `${textClasses} hover:bg-gray-100`
+                ? 'bg-[var(--color-light-blue)] text-white'
+                : `${textClasses} hover:bg-gray-100`
                 }`}
             >
               <Map className="w-4 h-4" />
@@ -59,8 +59,8 @@ export default function Navbar() {
             <Link
               href="/projects"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${isActive('/projects')
-                  ? 'bg-[var(--color-light-blue)] text-white'
-                  : `${textClasses} hover:bg-gray-100`
+                ? 'bg-[var(--color-light-blue)] text-white'
+                : `${textClasses} hover:bg-gray-100`
                 }`}
             >
               <FolderKanban className="w-4 h-4" />

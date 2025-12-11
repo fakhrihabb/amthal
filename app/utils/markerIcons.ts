@@ -1,15 +1,45 @@
 import { POIType } from '@/app/types/poi';
 
 /**
+ * Get color for candidate marker based on analysis score
+ * @param score - Overall analysis score (0-100), undefined if not analyzed
+ * @returns Hex color code
+ */
+export const getCandidateMarkerColor = (score?: number): string => {
+  // Brown/default for unanalyzed
+  if (score === undefined) {
+    return '#8B4513'; // Brown
+  }
+
+  // Red (0) → Yellow (50) → Green (100) gradient
+  if (score <= 50) {
+    // Red to Yellow (0-50)
+    const ratio = score / 50;
+    const r = 255;
+    const g = Math.round(165 + (255 - 165) * ratio); // 165 (dark yellow) to 255
+    const b = 0;
+    return `rgb(${r}, ${g}, ${b})`;
+  } else {
+    // Yellow to Green (50-100)
+    const ratio = (score - 50) / 50;
+    const r = Math.round(255 * (1 - ratio));
+    const g = 255;
+    const b = 0;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+};
+
+/**
  * Generate custom marker icons for different station types
  */
 export const getMarkerIcon = (
-  type: 'SPKLU' | 'SPBKLU' | 'CANDIDATE'
+  type: 'SPKLU' | 'SPBKLU' | 'CANDIDATE',
+  score?: number // For candidates only
 ): google.maps.Icon => {
   const colors = {
     SPKLU: '#0EA5E9', // Blue (brand color)
     SPBKLU: '#10B981', // Green
-    CANDIDATE: '#F97316', // Orange
+    CANDIDATE: getCandidateMarkerColor(score), // Dynamic based on score
   };
 
   const color = colors[type];

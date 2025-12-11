@@ -32,6 +32,7 @@ interface GoogleMapComponentProps {
     onDeleteCandidate: (id: string) => void;
     onAnalyze: () => void;
     mapContainerRef: React.RefObject<HTMLDivElement | null>;
+    isAnalyzing?: boolean;
     poiFilterState: POIFilterState;
     onPOIFilterChange: (filterState: POIFilterState) => void;
 }
@@ -54,6 +55,7 @@ export default function GoogleMapComponent({
     onDeleteCandidate,
     onAnalyze,
     mapContainerRef,
+    isAnalyzing = false,
     poiFilterState,
     onPOIFilterChange,
 }: GoogleMapComponentProps) {
@@ -289,6 +291,16 @@ export default function GoogleMapComponent({
                     );
                 })}
 
+                {/* Render Candidate Markers */}
+                {visibleCandidates.map((candidate) => (
+                    <Marker
+                        key={candidate.id}
+                        position={{ lat: candidate.latitude, lng: candidate.longitude }}
+                        icon={getMarkerIcon('CANDIDATE', candidate.analysisScore)}
+                        title="Lokasi Kandidat"
+                        onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
+                    />
+                ))}
                 {/* Render Info Window */}
                 {selectedMarker && selectedMarker.type === 'station' && (
                     <StationInfoWindow
@@ -303,6 +315,7 @@ export default function GoogleMapComponent({
                         onAnalyze={onAnalyze}
                         onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
                         onClose={onInfoWindowClose}
+                        isAnalyzing={isAnalyzing}
                     />
                 )}
 

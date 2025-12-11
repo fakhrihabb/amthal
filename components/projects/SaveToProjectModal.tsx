@@ -22,16 +22,16 @@ interface ProjectOption {
 export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData }: SaveToProjectModalProps) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'new' | 'existing'>('new');
-  
+
   // Form State
   const [newProjectName, setNewProjectName] = useState("");
   const [selectedProjectId, setSelectedProjectId] = useState("");
-  const [locationName, setLocationName] = useState(locationData.name || "");
-  
+  const [locationName, setLocationName] = useState(locationData?.address || locationData?.name || "");
+
   // Data State
   const [projects, setProjects] = useState<ProjectOption[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(false);
-  
+
   // Submission State
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -73,8 +73,9 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
     try {
       const payload = {
         location: {
-          ...locationData,
-          name: locationName // Ensure name is passed
+          latitude: (locationData as any).lat || locationData.latitude,
+          longitude: (locationData as any).lng || locationData.longitude,
+          address: locationData.address || ''
         },
         analysis: analysisData,
         locationName, // Explicit high level name
@@ -96,7 +97,7 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
 
       setSavedProjectId(result.projectId);
       setSaveSuccess(true);
-      
+
       // Optionally clear marker or notify parent? 
       // For now we just show success UI in modal
 
@@ -120,7 +121,7 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-brand-dark/40 backdrop-blur-md transition-all animate-in fade-in duration-200">
       <div className="glass-card bg-white/95 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100 border border-white/50">
-        
+
         {/* Header */}
         <div className="px-6 py-5 border-b border-brand-primary/10 flex justify-between items-center bg-gradient-to-r from-white to-slate-50">
           <h2 className="text-xl font-bold text-brand-dark flex items-center gap-2">
@@ -143,13 +144,13 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
               Lokasi <strong>"{locationName}"</strong> telah ditambahkan ke proyek Anda.
             </p>
             <div className="flex flex-col gap-3 w-full">
-              <button 
+              <button
                 onClick={handleGoToProject}
                 className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#134474] text-white rounded-xl font-semibold hover:bg-[#0D263F] transition-all shadow-md active:scale-95"
               >
                 Lihat Proyek <ArrowRight className="w-4 h-4" />
               </button>
-              <button 
+              <button
                 onClick={onClose}
                 className="w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
               >
@@ -160,7 +161,7 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
         ) : (
           /* Form View */
           <form onSubmit={handleSave} className="p-6">
-            
+
             {/* Location Name Field */}
             <div className="mb-6">
               <label htmlFor="locationName" className="block text-sm font-semibold text-brand-dark mb-1.5 flex items-center gap-1.5">
@@ -182,22 +183,20 @@ export const SaveToProjectModal = ({ isOpen, onClose, locationData, analysisData
               <button
                 type="button"
                 onClick={() => setActiveTab('new')}
-                className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all ${
-                  activeTab === 'new' 
-                    ? 'bg-white text-brand-primary shadow-sm ring-1 ring-black/5' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all ${activeTab === 'new'
+                  ? 'bg-white text-brand-primary shadow-sm ring-1 ring-black/5'
+                  : 'text-gray-500 hover:text-gray-700'
+                  }`}
               >
                 <Plus className="w-4 h-4" /> Buat Proyek Baru
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('existing')}
-                className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all ${
-                  activeTab === 'existing' 
-                    ? 'bg-white text-brand-primary shadow-sm ring-1 ring-black/5' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-lg transition-all ${activeTab === 'existing'
+                  ? 'bg-white text-brand-primary shadow-sm ring-1 ring-black/5'
+                  : 'text-gray-500 hover:text-gray-700'
+                  }`}
               >
                 <FolderOpen className="w-4 h-4" /> Proyek Ada
               </button>
