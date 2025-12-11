@@ -11,6 +11,7 @@ import { ComparisonTable } from "@/components/projects/details/ComparisonTable";
 import { ComparisonCharts } from "@/components/projects/details/ComparisonCharts";
 import { HistoryTimeline } from "@/components/projects/details/HistoryTimeline";
 import { ProjectMap } from "@/components/projects/details/ProjectMap";
+import { TeamNotesFloating } from "@/components/projects/details/TeamNotesFloating";
 
 export default function ProjectDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -164,7 +165,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
               onClick={() => setActiveTab('history')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'history' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
             >
-               Aktivitas & Catatan
+               Riwayat Aktivitas
             </button>
         </div>
 
@@ -215,6 +216,9 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
                <HistoryTimeline projectId={project.id} />
             </div>
         )}
+
+        {/* Floating Notes Widget */}
+        <TeamNotesFloating projectId={project.id} />
       </div>
     </main>
   );
