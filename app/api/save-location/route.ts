@@ -75,6 +75,21 @@ export async function POST(request: Request) {
       // Non-fatal, but worth logging
     }
 
+    // 4. Log Actvity (History)
+    if (newProjectName) {
+      await supabase.from('project_history').insert([{
+        project_id: targetProjectId,
+        action_type: 'CREATE_PROJECT',
+        description: `Proyek "${newProjectName}" dibuat dari Intelligence Planner`
+      }]);
+    }
+
+    await supabase.from('project_history').insert([{
+      project_id: targetProjectId,
+      action_type: 'ADD_LOCATION',
+      description: `Menambahkan lokasi "${locationName || "New Location"}"`
+    }]);
+
     return NextResponse.json({ 
         success: true, 
         projectId: targetProjectId, 
