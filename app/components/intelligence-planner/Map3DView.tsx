@@ -49,7 +49,8 @@ export default function Map3DView({ center, onClose }: Map3DViewProps) {
                 }
 
                 // Import maps3d library
-                const { Map3DElement } = await window.google.maps.importLibrary('maps3d');
+                const maps3dLib = await window.google.maps.importLibrary('maps3d') as any;
+                const { Map3DElement } = maps3dLib;
 
                 if (!containerRef.current) return;
 
