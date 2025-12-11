@@ -14,6 +14,7 @@ import CandidateInfoWindow from './CandidateInfoWindow';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
 import Map3DView from './Map3DView';
+import PhotorealisticMap from './PhotorealisticMap';
 
 interface GoogleMapComponentProps {
     stations: Station[];
@@ -28,7 +29,8 @@ interface GoogleMapComponentProps {
     mapContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const libraries: LoadScriptProps['libraries'] = ['places'];
+// @ts-ignore - maps3d is not yet in the type definition for libraries
+const libraries: LoadScriptProps['libraries'] = ['places', 'maps3d'];
 
 // Default center: DKI Jakarta
 const DEFAULT_CENTER = { lat: -6.2088, lng: 106.8456 };
@@ -46,7 +48,8 @@ export default function GoogleMapComponent({
     onAnalyze,
     mapContainerRef,
 }: GoogleMapComponentProps) {
-    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [map, setMap] = useState<google.maps.Map | null>(null); // 2D Map Instance
+    const [map3D, setMap3D] = useState<google.maps.maps3d.Map3DElement | null>(null); // 3D Map Element
     const [is3DMode, setIs3DMode] = useState(false);
 
     // Store the view state (center, zoom, etc.) to persist across re-renders/remounts
@@ -64,12 +67,12 @@ export default function GoogleMapComponent({
     });
 
     // Toggle 3D mode logic
+    // Toggle 3D mode logic
     const toggle3DMode = useCallback(() => {
-        if (map) {
-            // Check if getCenter returns a value before accessing
+        if (!is3DMode && map) {
+            // Switching FROM 2D TO 3D
+            // Capture current 2D state before switching
             const currentCenter = map.getCenter();
-
-            // Capture current state before switching
             viewStateRef.current = {
                 center: currentCenter ? currentCenter.toJSON() : viewStateRef.current.center,
                 zoom: map.getZoom() || viewStateRef.current.zoom,
@@ -77,12 +80,20 @@ export default function GoogleMapComponent({
                 tilt: map.getTilt() || 0
             };
         }
+        // Switching FROM 3D TO 2D
+        // viewStateRef is already updated by handle3DCameraChange
+
         setIs3DMode(prev => !prev);
-    }, [map]);
+    }, [map, is3DMode]);
 
     // Handle map load
     const handleMapLoad = useCallback((mapInstance: google.maps.Map) => {
         setMap(mapInstance);
+    }, []);
+
+    // Handle 3D Camera updates to keep viewStateRef in sync
+    const handle3DCameraChange = useCallback((camera: { center: google.maps.LatLngLiteral; zoom: number; heading: number; tilt: number }) => {
+        viewStateRef.current = camera;
     }, []);
 
     // Filter stations by type and layer visibility
@@ -170,58 +181,75 @@ export default function GoogleMapComponent({
             <ScreenshotButton mapContainerRef={mapContainerRef} />
 
             {/* Google Map - Key change forces remount between modes */}
-            <GoogleMap
-                key={is3DMode ? 'map-3d' : 'map-2d'}
-                mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={viewStateRef.current.center}
-                zoom={viewStateRef.current.zoom}
-                options={mapOptions}
-                onClick={onMapClick}
-                onLoad={handleMapLoad}
-            >
-                {/* Render Station Markers */}
-                {visibleStations.map((station) => (
-                    <Marker
-                        key={station.id}
-                        position={{ lat: station.latitude, lng: station.longitude }}
-                        icon={getMarkerIcon(station.type)}
-                        title={station.name}
-                        onClick={() => onMarkerClick({ type: 'station', data: station })}
-                    />
-                ))}
+            {/* Map Switching Logic */}
+            {is3DMode ? (
+                <PhotorealisticMap
+                    center={viewStateRef.current.center}
+                    zoom={viewStateRef.current.zoom}
+                    heading={viewStateRef.current.heading}
+                    tilt={viewStateRef.current.tilt}
+                    stations={visibleStations}
+                    candidates={visibleCandidates}
+                    onMarkerClick={onMarkerClick}
+                    onCameraChange={handle3DCameraChange}
+                    onLoad={setMap3D}
+                />
+            ) : (
+                <GoogleMap
+                    key="map-2d"
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={viewStateRef.current.center}
+                    zoom={viewStateRef.current.zoom}
+                    options={mapOptions}
+                    onClick={onMapClick}
+                    onLoad={handleMapLoad}
+                    onUnmount={() => setMap(null)}
+                >
+                    {/* Render Station Markers */}
+                    {visibleStations.map((station) => (
+                        <Marker
+                            key={station.id}
+                            position={{ lat: station.latitude, lng: station.longitude }}
+                            icon={getMarkerIcon(station.type)}
+                            title={station.name}
+                            onClick={() => onMarkerClick({ type: 'station', data: station })}
+                        />
+                    ))}
 
-                {/* Render Candidate Markers */}
-                {visibleCandidates.map((candidate) => (
-                    <Marker
-                        key={candidate.id}
-                        position={{ lat: candidate.latitude, lng: candidate.longitude }}
-                        icon={getMarkerIcon('CANDIDATE')}
-                        title="Lokasi Kandidat"
-                        onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
-                    />
-                ))}
+                    {/* Render Candidate Markers */}
+                    {visibleCandidates.map((candidate) => (
+                        <Marker
+                            key={candidate.id}
+                            position={{ lat: candidate.latitude, lng: candidate.longitude }}
+                            icon={getMarkerIcon('CANDIDATE')}
+                            title="Lokasi Kandidat"
+                            onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
+                        />
+                    ))}
 
-                {/* Render Info Window */}
-                {selectedMarker && selectedMarker.type === 'station' && (
-                    <StationInfoWindow
-                        station={selectedMarker.data as Station}
-                        onClose={onInfoWindowClose}
-                    />
-                )}
+                    {/* Render Info Window */}
+                    {selectedMarker && selectedMarker.type === 'station' && (
+                        <StationInfoWindow
+                            station={selectedMarker.data as Station}
+                            onClose={onInfoWindowClose}
+                        />
+                    )}
 
-                {selectedMarker && selectedMarker.type === 'candidate' && (
-                    <CandidateInfoWindow
-                        location={selectedMarker.data as CandidateLocation}
-                        onAnalyze={onAnalyze}
-                        onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
-                        onClose={onInfoWindowClose}
-                    />
-                )}
-            </GoogleMap>
+                    {selectedMarker && selectedMarker.type === 'candidate' && (
+                        <CandidateInfoWindow
+                            location={selectedMarker.data as CandidateLocation}
+                            onAnalyze={onAnalyze}
+                            onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
+                            onClose={onInfoWindowClose}
+                        />
+                    )}
+                </GoogleMap>
+            )}
 
             {/* 3D View Overlay - Controls & Instructions */}
             <Map3DView
                 map={map}
+                map3D={map3D}
                 is3DMode={is3DMode}
             />
         </>

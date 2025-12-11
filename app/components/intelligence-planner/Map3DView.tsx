@@ -3,24 +3,38 @@ import { useCallback } from 'react';
 
 interface Map3DViewProps {
     map: google.maps.Map | null;
+    map3D?: google.maps.maps3d.Map3DElement | null;
     is3DMode: boolean;
 }
 
-export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
+export default function Map3DView({ map, map3D, is3DMode }: Map3DViewProps) {
     const handleRotate = useCallback((direction: 'cw' | 'ccw') => {
-        if (!map) return;
-        const currentHeading = map.getHeading() || 0;
         const adjustment = direction === 'cw' ? 45 : -45;
-        map.setHeading(currentHeading + adjustment);
-    }, [map]);
+
+        if (is3DMode && map3D) {
+            // 3D Mode - modify element property directly
+            map3D.heading = (map3D.heading || 0) + adjustment;
+        } else if (map) {
+            // 2D Mode
+            const currentHeading = map.getHeading() || 0;
+            map.setHeading(currentHeading + adjustment);
+        }
+    }, [map, map3D, is3DMode]);
 
     const handleTilt = useCallback((direction: 'up' | 'down') => {
-        if (!map) return;
-        const currentTilt = map.getTilt() || 0;
-        // Tilt range is typically 0 to 67.5 depending on zoom
         const adjustment = direction === 'down' ? 20 : -20;
-        map.setTilt(Math.min(67.5, Math.max(0, currentTilt + adjustment)));
-    }, [map]);
+
+        if (is3DMode && map3D) {
+            // 3D Mode
+            const currentTilt = map3D.tilt || 0;
+            map3D.tilt = Math.min(67.5, Math.max(0, currentTilt + adjustment));
+        } else if (map) {
+            // 2D Mode
+            const currentTilt = map.getTilt() || 0;
+            // Tilt range is typically 0 to 67.5 depending on zoom
+            map.setTilt(Math.min(67.5, Math.max(0, currentTilt + adjustment)));
+        }
+    }, [map, map3D, is3DMode]);
 
     return (
         <>
@@ -70,7 +84,13 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
 
                 {/* Compass Reset - Visible in both modes */}
                 <button
-                    onClick={() => map?.setHeading(0)}
+                    onClick={() => {
+                        if (is3DMode && map3D) {
+                            map3D.heading = 0;
+                        } else {
+                            map?.setHeading(0);
+                        }
+                    }}
                     className="glass-panel p-2 rounded-lg hover:bg-white/90 transition-all shadow-md"
                     title="Reset Kompas (Utara)"
                 >
