@@ -16,6 +16,8 @@ import { PlacesService } from '@/app/services/places-api';
 import StationInfoWindow from './StationInfoWindow';
 import CandidateInfoWindow from './CandidateInfoWindow';
 import POIInfoWindow from './POIInfoWindow';
+import SearchBar from './SearchBar';
+import LocationSelectionPanel from './LocationSelectionPanel';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
 import Map3DView from './Map3DView';
@@ -34,6 +36,7 @@ interface GoogleMapComponentProps {
     mapContainerRef: React.RefObject<HTMLDivElement | null>;
     poiFilterState: POIFilterState;
     onPOIFilterChange: (filterState: POIFilterState) => void;
+    onSearchLocationSelect: (location: { lat: number; lng: number; address: string }) => void;
 }
 
 // @ts-ignore - maps3d removed
@@ -56,11 +59,14 @@ export default function GoogleMapComponent({
     mapContainerRef,
     poiFilterState,
     onPOIFilterChange,
+    onSearchLocationSelect,
 }: GoogleMapComponentProps) {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [is3DMode, setIs3DMode] = useState(false);
     const [pois, setPois] = useState<POI[]>([]);
     const [isLoadingPOIs, setIsLoadingPOIs] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+    const [showLocationPanel, setShowLocationPanel] = useState(false);
     const placesServiceRef = useRef<PlacesService | null>(null);
 
     // Store the view state (center, zoom, etc.) to persist across re-renders/remounts
@@ -86,6 +92,34 @@ export default function GoogleMapComponent({
         setMap(mapInstance);
         // Initialize Places Service
         placesServiceRef.current = new PlacesService(mapInstance);
+    }, []);
+
+    // Handle search location select
+    const handleSearchSelect = useCallback((location: { lat: number; lng: number; address: string }) => {
+        if (map) {
+            // Center map on location with smooth animation
+            map.panTo({ lat: location.lat, lng: location.lng });
+            map.setZoom(16);
+
+            // Update view state
+            viewStateRef.current.center = { lat: location.lat, lng: location.lng };
+            viewStateRef.current.zoom = 16;
+        }
+
+        // Pass to parent for potential candidate addition
+        onSearchLocationSelect(location);
+    }, [map, onSearchLocationSelect]);
+
+    // Handle location panel analyze
+    const handleLocationAnalyze = useCallback(() => {
+        setShowLocationPanel(false);
+        onAnalyze();
+    }, [onAnalyze]);
+
+    // Handle location panel close
+    const handleLocationPanelClose = useCallback(() => {
+        setShowLocationPanel(false);
+        setSelectedLocation(null);
     }, []);
 
     // Filter stations by type and layer visibility
@@ -235,11 +269,23 @@ export default function GoogleMapComponent({
 
     return (
         <>
+            {/* Search Bar */}
+            <SearchBar onLocationSelect={handleSearchSelect} />
+
             {/* 3D Toggle Button */}
             <View3DToggle is3DMode={is3DMode} onToggle={toggle3DMode} />
 
             {/* Screenshot Button */}
             <ScreenshotButton mapContainerRef={mapContainerRef} />
+
+            {/* Location Selection Panel */}
+            {showLocationPanel && selectedLocation && (
+                <LocationSelectionPanel
+                    location={selectedLocation}
+                    onAnalyze={handleLocationAnalyze}
+                    onClose={handleLocationPanelClose}
+                />
+            )}
 
             {/* Google Map - Key change forces remount between modes to ensure clean Map ID switch*/}
             <GoogleMap
