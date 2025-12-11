@@ -64,7 +64,6 @@ export default function GoogleMapComponent({
     const [is3DMode, setIs3DMode] = useState(false);
     const [pois, setPois] = useState<POI[]>([]);
     const [isLoadingPOIs, setIsLoadingPOIs] = useState(false);
-    const [searchResultMarker, setSearchResultMarker] = useState<{ lat: number; lng: number; address: string } | null>(null);
     const placesServiceRef = useRef<PlacesService | null>(null);
 
     // Store the view state (center, zoom, etc.) to persist across re-renders/remounts
@@ -104,28 +103,11 @@ export default function GoogleMapComponent({
             viewStateRef.current.zoom = 16;
         }
 
-        // Show search result marker
-        setSearchResultMarker(location);
-
         // Pass to parent
         onSearchLocationSelect(location);
     }, [map, onSearchLocationSelect]);
 
-    // Handle search result marker click
-    const handleSearchMarkerClick = useCallback(() => {
-        if (searchResultMarker) {
-            onMarkerClick({
-                type: 'candidate',
-                data: {
-                    id: 'search-result',
-                    latitude: searchResultMarker.lat,
-                    longitude: searchResultMarker.lng,
-                    address: searchResultMarker.address,
-                    createdAt: new Date()
-                }
-            });
-        }
-    }, [searchResultMarker, onMarkerClick]);
+
 
     // Filter stations by type and layer visibility
     const visibleStations = stations.filter((station) => {
@@ -330,16 +312,6 @@ export default function GoogleMapComponent({
                         />
                     );
                 })}
-
-                {/* Search Result Marker */}
-                {searchResultMarker && (
-                    <Marker
-                        position={{ lat: searchResultMarker.lat, lng: searchResultMarker.lng }}
-                        icon={getMarkerIcon('CANDIDATE')}
-                        onClick={handleSearchMarkerClick}
-                        zIndex={1000}
-                    />
-                )}
 
                 {/* Render Info Window */}
                 {selectedMarker && selectedMarker.type === 'station' && (
