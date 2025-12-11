@@ -1,16 +1,21 @@
 'use client';
 
 import { useLoadScript, GoogleMap, Marker, LoadScriptProps } from '@react-google-maps/api';
-import { useMemo, useState, useCallback, useRef } from 'react';
+import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import {
     Station,
     CandidateLocation,
     LayerState,
     SelectedMarker,
 } from '@/app/types/intelligence-planner';
-import { getMarkerIcon } from '@/app/utils/markerIcons';
+import { POI, POIFilterState, POIType } from '@/app/types/poi';
+import { getMarkerIcon, getPOIMarkerIcon } from '@/app/utils/markerIcons';
+import { POI_TYPES, DEFAULT_POI_RADIUS } from '@/app/constants/poi-types';
+import { isWithinRadius } from '@/app/utils/distance-calculator';
+import { PlacesService } from '@/app/services/places-api';
 import StationInfoWindow from './StationInfoWindow';
 import CandidateInfoWindow from './CandidateInfoWindow';
+import POIInfoWindow from './POIInfoWindow';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
 import Map3DView from './Map3DView';
@@ -27,6 +32,8 @@ interface GoogleMapComponentProps {
     onDeleteCandidate: (id: string) => void;
     onAnalyze: () => void;
     mapContainerRef: React.RefObject<HTMLDivElement | null>;
+    poiFilterState: POIFilterState;
+    onPOIFilterChange: (filterState: POIFilterState) => void;
 }
 
 // @ts-ignore - maps3d removed
@@ -47,9 +54,14 @@ export default function GoogleMapComponent({
     onDeleteCandidate,
     onAnalyze,
     mapContainerRef,
+    poiFilterState,
+    onPOIFilterChange,
 }: GoogleMapComponentProps) {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [is3DMode, setIs3DMode] = useState(false);
+    const [pois, setPois] = useState<POI[]>([]);
+    const [isLoadingPOIs, setIsLoadingPOIs] = useState(false);
+    const placesServiceRef = useRef<PlacesService | null>(null);
 
     // Store the view state (center, zoom, etc.) to persist across re-renders/remounts
     const viewStateRef = useRef({
@@ -72,6 +84,8 @@ export default function GoogleMapComponent({
     // Handle map load
     const handleMapLoad = useCallback((mapInstance: google.maps.Map) => {
         setMap(mapInstance);
+        // Initialize Places Service
+        placesServiceRef.current = new PlacesService(mapInstance);
     }, []);
 
     // Filter stations by type and layer visibility
@@ -83,6 +97,72 @@ export default function GoogleMapComponent({
 
     // Filter candidates by layer visibility
     const visibleCandidates = layers.candidates ? candidates : [];
+
+    // Fetch POIs when filter state changes
+    useEffect(() => {
+        const fetchPOIs = async () => {
+            if (!poiFilterState.enabled || !placesServiceRef.current || candidates.length === 0) {
+                setPois([]);
+                return;
+            }
+
+            // Get selected POI types
+            const selectedTypes = Object.entries(poiFilterState.categories)
+                .filter(([_, enabled]) => enabled)
+                .map(([type]) => type as POIType);
+
+            if (selectedTypes.length === 0) {
+                setPois([]);
+                return;
+            }
+
+            setIsLoadingPOIs(true);
+
+            try {
+                // Use the first candidate as center point
+                const centerCandidate = candidates[0];
+                const location = {
+                    lat: centerCandidate.latitude,
+                    lng: centerCandidate.longitude
+                };
+
+                const results = await placesServiceRef.current.searchNearby(
+                    location,
+                    poiFilterState.radius,
+                    selectedTypes
+                );
+
+                setPois(results);
+            } catch (error) {
+                console.error('Error fetching POIs:', error);
+                setPois([]);
+            } finally {
+                setIsLoadingPOIs(false);
+            }
+        };
+
+        fetchPOIs();
+    }, [poiFilterState, candidates]);
+
+    // Filter POIs by radius from candidates
+    const visiblePOIs = useMemo(() => {
+        if (!layers.poi || !poiFilterState.enabled || candidates.length === 0) {
+            return [];
+        }
+
+        // Filter POIs within radius of any candidate
+        return pois.filter(poi => {
+            return candidates.some(candidate =>
+                isWithinRadius(
+                    candidate.latitude,
+                    candidate.longitude,
+                    poi.latitude,
+                    poi.longitude,
+                    poiFilterState.radius
+                )
+            );
+        });
+    }, [pois, layers.poi, poiFilterState.enabled, poiFilterState.radius, candidates]);
 
     // Calculate map options based on mode
     const mapOptions = useMemo<google.maps.MapOptions>(() => {
@@ -194,6 +274,21 @@ export default function GoogleMapComponent({
                     />
                 ))}
 
+                {/* Render POI Markers */}
+                {visiblePOIs.map((poi) => {
+                    const poiConfig = Object.values(POI_TYPES).find(config => config.id === poi.type);
+                    return (
+                        <Marker
+                            key={poi.id}
+                            position={{ lat: poi.latitude, lng: poi.longitude }}
+                            icon={getPOIMarkerIcon(poiConfig?.color || '#6B7280')}
+                            title={poi.name}
+                            onClick={() => onMarkerClick({ type: 'poi', data: poi })}
+                            zIndex={1} // Lower z-index so POIs appear below stations/candidates
+                        />
+                    );
+                })}
+
                 {/* Render Info Window */}
                 {selectedMarker && selectedMarker.type === 'station' && (
                     <StationInfoWindow
@@ -207,6 +302,14 @@ export default function GoogleMapComponent({
                         location={selectedMarker.data as CandidateLocation}
                         onAnalyze={onAnalyze}
                         onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
+                        onClose={onInfoWindowClose}
+                    />
+                )}
+
+                {selectedMarker && selectedMarker.type === 'poi' && (
+                    <POIInfoWindow
+                        poi={selectedMarker.data as POI}
+                        candidateLocation={candidates[0]}
                         onClose={onInfoWindowClose}
                     />
                 )}
