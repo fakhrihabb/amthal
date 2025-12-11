@@ -33,6 +33,10 @@ export default function IntelligencePlannerClient() {
     // Selected marker for info window
     const [selectedMarker, setSelectedMarker] = useState<SelectedMarker | null>(null);
 
+    // Analysis results state
+    const [analysisResults, setAnalysisResults] = useState<any | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+
     // Map container ref for screenshot
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -125,13 +129,17 @@ export default function IntelligencePlannerClient() {
             const analysisData = await response.json();
             console.log('Analysis complete:', analysisData);
 
-            // TODO: Display analysis results in UI (will be done by Developer 1)
-            // For now, just log to console
-            alert(`Analisis selesai!\nSkor: ${analysisData.scores.overall}/100\nRekomendasi: ${analysisData.recommendation.type}`);
+            // Store analysis results in state
+            setAnalysisResults(analysisData);
+
+            // Open right sidebar to show results
+            setRightSidebarOpen(true);
 
         } catch (error) {
             console.error('Error analyzing location:', error);
             alert('Gagal menganalisis lokasi. Silakan coba lagi.');
+        } finally {
+            setIsAnalyzing(false);
         }
     }, [selectedMarker]);
 
@@ -180,6 +188,8 @@ export default function IntelligencePlannerClient() {
             <RightSidebar
                 isOpen={rightSidebarOpen}
                 onToggle={() => setRightSidebarOpen(!rightSidebarOpen)}
+                analysisResults={analysisResults}
+                isAnalyzing={isAnalyzing}
             />
         </div>
     );
