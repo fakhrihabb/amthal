@@ -124,60 +124,62 @@ export default function GoogleMapComponent({
             {/* Screenshot Button */}
             <ScreenshotButton mapContainerRef={mapContainerRef} />
 
-            {/* Conditional rendering: Map3DView for photorealistic 3D, GoogleMap for 2D */}
-            {is3DMode ? (
+            {/* Always render GoogleMap */}
+            <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={center}
+                zoom={11}
+                options={mapOptions}
+                onClick={onMapClick}
+                onLoad={handleMapLoad}
+            >
+                {/* Render Station Markers */}
+                {visibleStations.map((station) => (
+                    <Marker
+                        key={station.id}
+                        position={{ lat: station.latitude, lng: station.longitude }}
+                        icon={getMarkerIcon(station.type)}
+                        title={station.name}
+                        onClick={() => onMarkerClick({ type: 'station', data: station })}
+                    />
+                ))}
+
+                {/* Render Candidate Markers */}
+                {visibleCandidates.map((candidate) => (
+                    <Marker
+                        key={candidate.id}
+                        position={{ lat: candidate.latitude, lng: candidate.longitude }}
+                        icon={getMarkerIcon('CANDIDATE')}
+                        title="Lokasi Kandidat"
+                        onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
+                    />
+                ))}
+
+                {/* Render Info Window */}
+                {selectedMarker && selectedMarker.type === 'station' && (
+                    <StationInfoWindow
+                        station={selectedMarker.data as Station}
+                        onClose={onInfoWindowClose}
+                    />
+                )}
+
+                {selectedMarker && selectedMarker.type === 'candidate' && (
+                    <CandidateInfoWindow
+                        location={selectedMarker.data as CandidateLocation}
+                        onAnalyze={onAnalyze}
+                        onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
+                        onClose={onInfoWindowClose}
+                    />
+                )}
+            </GoogleMap>
+
+            {/* 3D View Overlay - only shows controls */}
+            {is3DMode && map && (
                 <Map3DView
                     center={center}
+                    map={map}
                     onClose={() => setIs3DMode(false)}
                 />
-            ) : (
-                <GoogleMap
-                    mapContainerStyle={{ width: '100%', height: '100%' }}
-                    center={center}
-                    zoom={11}
-                    options={mapOptions}
-                    onClick={onMapClick}
-                    onLoad={handleMapLoad}
-                >
-                    {/* Render Station Markers */}
-                    {visibleStations.map((station) => (
-                        <Marker
-                            key={station.id}
-                            position={{ lat: station.latitude, lng: station.longitude }}
-                            icon={getMarkerIcon(station.type)}
-                            title={station.name}
-                            onClick={() => onMarkerClick({ type: 'station', data: station })}
-                        />
-                    ))}
-
-                    {/* Render Candidate Markers */}
-                    {visibleCandidates.map((candidate) => (
-                        <Marker
-                            key={candidate.id}
-                            position={{ lat: candidate.latitude, lng: candidate.longitude }}
-                            icon={getMarkerIcon('CANDIDATE')}
-                            title="Lokasi Kandidat"
-                            onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
-                        />
-                    ))}
-
-                    {/* Render Info Window */}
-                    {selectedMarker && selectedMarker.type === 'station' && (
-                        <StationInfoWindow
-                            station={selectedMarker.data as Station}
-                            onClose={onInfoWindowClose}
-                        />
-                    )}
-
-                    {selectedMarker && selectedMarker.type === 'candidate' && (
-                        <CandidateInfoWindow
-                            location={selectedMarker.data as CandidateLocation}
-                            onAnalyze={onAnalyze}
-                            onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
-                            onClose={onInfoWindowClose}
-                        />
-                    )}
-                </GoogleMap>
             )}
         </>
     );
