@@ -13,6 +13,7 @@ import StationInfoWindow from './StationInfoWindow';
 import CandidateInfoWindow from './CandidateInfoWindow';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
+import Map3DView from './Map3DView';
 
 interface GoogleMapComponentProps {
     stations: Station[];
@@ -46,6 +47,7 @@ export default function GoogleMapComponent({
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
         libraries,
+        version: 'beta', // Required for photorealistic 3D
     });
 
     // Default center: DKI Jakarta
@@ -53,19 +55,8 @@ export default function GoogleMapComponent({
 
     // Toggle 3D mode
     const toggle3DMode = useCallback(() => {
-        if (!map) return;
-
-        if (is3DMode) {
-            // Switch to 2D
-            map.setTilt(0);
-            setIs3DMode(false);
-        } else {
-            // Switch to 3D
-            map.setTilt(45);
-            map.setZoom(18); // Zoom in for better 3D view
-            setIs3DMode(true);
-        }
-    }, [map, is3DMode]);
+        setIs3DMode(!is3DMode);
+    }, [is3DMode]);
 
     // Handle map load
     const handleMapLoad = useCallback((mapInstance: google.maps.Map) => {
@@ -133,53 +124,61 @@ export default function GoogleMapComponent({
             {/* Screenshot Button */}
             <ScreenshotButton mapContainerRef={mapContainerRef} />
 
-            <GoogleMap
-                mapContainerStyle={{ width: '100%', height: '100%' }}
-                center={center}
-                zoom={11}
-                options={mapOptions}
-                onClick={onMapClick}
-                onLoad={handleMapLoad}
-            >
-                {/* Render Station Markers */}
-                {visibleStations.map((station) => (
-                    <Marker
-                        key={station.id}
-                        position={{ lat: station.latitude, lng: station.longitude }}
-                        icon={getMarkerIcon(station.type)}
-                        title={station.name}
-                        onClick={() => onMarkerClick({ type: 'station', data: station })}
-                    />
-                ))}
+            {/* Conditional rendering: Map3DView for photorealistic 3D, GoogleMap for 2D */}
+            {is3DMode ? (
+                <Map3DView
+                    center={center}
+                    onClose={() => setIs3DMode(false)}
+                />
+            ) : (
+                <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={center}
+                    zoom={11}
+                    options={mapOptions}
+                    onClick={onMapClick}
+                    onLoad={handleMapLoad}
+                >
+                    {/* Render Station Markers */}
+                    {visibleStations.map((station) => (
+                        <Marker
+                            key={station.id}
+                            position={{ lat: station.latitude, lng: station.longitude }}
+                            icon={getMarkerIcon(station.type)}
+                            title={station.name}
+                            onClick={() => onMarkerClick({ type: 'station', data: station })}
+                        />
+                    ))}
 
-                {/* Render Candidate Markers */}
-                {visibleCandidates.map((candidate) => (
-                    <Marker
-                        key={candidate.id}
-                        position={{ lat: candidate.latitude, lng: candidate.longitude }}
-                        icon={getMarkerIcon('CANDIDATE')}
-                        title="Lokasi Kandidat"
-                        onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
-                    />
-                ))}
+                    {/* Render Candidate Markers */}
+                    {visibleCandidates.map((candidate) => (
+                        <Marker
+                            key={candidate.id}
+                            position={{ lat: candidate.latitude, lng: candidate.longitude }}
+                            icon={getMarkerIcon('CANDIDATE')}
+                            title="Lokasi Kandidat"
+                            onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
+                        />
+                    ))}
 
-                {/* Render Info Window */}
-                {selectedMarker && selectedMarker.type === 'station' && (
-                    <StationInfoWindow
-                        station={selectedMarker.data as Station}
-                        onClose={onInfoWindowClose}
-                    />
-                )}
+                    {/* Render Info Window */}
+                    {selectedMarker && selectedMarker.type === 'station' && (
+                        <StationInfoWindow
+                            station={selectedMarker.data as Station}
+                            onClose={onInfoWindowClose}
+                        />
+                    )}
 
-                {selectedMarker && selectedMarker.type === 'candidate' && (
-                    <CandidateInfoWindow
-                        location={selectedMarker.data as CandidateLocation}
-                        onAnalyze={onAnalyze}
-                        onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
-                        onClose={onInfoWindowClose}
-                    />
-                )}
-            </GoogleMap>
+                    {selectedMarker && selectedMarker.type === 'candidate' && (
+                        <CandidateInfoWindow
+                            location={selectedMarker.data as CandidateLocation}
+                            onAnalyze={onAnalyze}
+                            onDelete={() => onDeleteCandidate((selectedMarker.data as CandidateLocation).id)}
+                            onClose={onInfoWindowClose}
+                        />
+                    )}
+                </GoogleMap>
+            )}
         </>
     );
 }
