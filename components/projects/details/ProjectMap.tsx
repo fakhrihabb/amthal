@@ -23,8 +23,21 @@ export const ProjectMap = ({ locations, onLocationSelect, selectedLocationId }: 
     libraries,
   });
 
-  // Default center (Jakarta) if no locations
-  const defaultCenter = useMemo(() => ({ lat: -6.2088, lng: 106.8456 }), []);
+  // Center on last added location, or default to Jakarta if no locations
+  const defaultCenter = useMemo(() => {
+    if (locations.length === 0) {
+      return { lat: -6.2088, lng: 106.8456 }; // Jakarta default
+    }
+
+    // Find the most recently added location (last in the array or by created_at)
+    const lastLocation = locations[locations.length - 1];
+
+    if (lastLocation.latitude && lastLocation.longitude) {
+      return { lat: lastLocation.latitude, lng: lastLocation.longitude };
+    }
+
+    return { lat: -6.2088, lng: 106.8456 }; // Fallback to Jakarta
+  }, [locations]);
 
   // Fit bounds when locations change
   useEffect(() => {
@@ -65,6 +78,15 @@ export const ProjectMap = ({ locations, onLocationSelect, selectedLocationId }: 
     mapRef.current = map;
   }, []);
 
+  // Calculate initial zoom level based on locations
+  const initialZoom = useMemo(() => {
+    // If we have locations and are centering on the last one, zoom in closer
+    if (locations.length > 0 && locations[locations.length - 1].latitude) {
+      return 14; // Closer zoom for single location
+    }
+    return 11; // Default zoom for Jakarta or when showing all
+  }, [locations]);
+
   if (loadError) return <div className="h-full bg-gray-100 flex items-center justify-center text-red-500">Error Loading Map</div>;
   if (!isLoaded) return <div className="h-full bg-gray-100 flex items-center justify-center text-gray-500">Memuat Peta...</div>;
 
@@ -72,7 +94,7 @@ export const ProjectMap = ({ locations, onLocationSelect, selectedLocationId }: 
     <GoogleMap
       mapContainerStyle={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
       center={defaultCenter}
-      zoom={11}
+      zoom={initialZoom}
       onLoad={onLoad}
       options={{
         mapTypeControl: false,

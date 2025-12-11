@@ -1,6 +1,6 @@
 'use client';
 
-import { useLoadScript, GoogleMap, Marker, LoadScriptProps } from '@react-google-maps/api';
+import { useLoadScript, GoogleMap, Marker, LoadScriptProps, InfoWindow } from '@react-google-maps/api';
 import { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import {
     Station,
@@ -16,6 +16,7 @@ import { PlacesService } from '@/app/services/places-api';
 import StationInfoWindow from './StationInfoWindow';
 import CandidateInfoWindow from './CandidateInfoWindow';
 import POIInfoWindow from './POIInfoWindow';
+import SearchBar from './SearchBar';
 import View3DToggle from './View3DToggle';
 import ScreenshotButton from './ScreenshotButton';
 import Map3DView from './Map3DView';
@@ -35,6 +36,7 @@ interface GoogleMapComponentProps {
     isAnalyzing?: boolean;
     poiFilterState: POIFilterState;
     onPOIFilterChange: (filterState: POIFilterState) => void;
+    onSearchLocationSelect: (location: { lat: number; lng: number; address: string }) => void;
 }
 
 // @ts-ignore - maps3d removed
@@ -58,6 +60,7 @@ export default function GoogleMapComponent({
     isAnalyzing = false,
     poiFilterState,
     onPOIFilterChange,
+    onSearchLocationSelect,
 }: GoogleMapComponentProps) {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [is3DMode, setIs3DMode] = useState(false);
@@ -89,6 +92,24 @@ export default function GoogleMapComponent({
         // Initialize Places Service
         placesServiceRef.current = new PlacesService(mapInstance);
     }, []);
+
+    // Handle search location select
+    const handleSearchSelect = useCallback((location: { lat: number; lng: number; address: string }) => {
+        if (map) {
+            // Center map on location with smooth animation
+            map.panTo({ lat: location.lat, lng: location.lng });
+            map.setZoom(16);
+
+            // Update view state
+            viewStateRef.current.center = { lat: location.lat, lng: location.lng };
+            viewStateRef.current.zoom = 16;
+        }
+
+        // Pass to parent
+        onSearchLocationSelect(location);
+    }, [map, onSearchLocationSelect]);
+
+
 
     // Filter stations by type and layer visibility
     const visibleStations = stations.filter((station) => {
@@ -237,10 +258,13 @@ export default function GoogleMapComponent({
 
     return (
         <>
-            {/* 3D Toggle Button */}
+            {/* Search Bar - Top Left */}
+            <SearchBar onLocationSelect={handleSearchSelect} />
+
+            {/* 3D Toggle Button - Bottom Left */}
             <View3DToggle is3DMode={is3DMode} onToggle={toggle3DMode} />
 
-            {/* Screenshot Button */}
+            {/* Screenshot Button - Bottom Left (below 3D toggle) */}
             <ScreenshotButton mapContainerRef={mapContainerRef} />
 
             {/* Google Map - Key change forces remount between modes to ensure clean Map ID switch*/}
