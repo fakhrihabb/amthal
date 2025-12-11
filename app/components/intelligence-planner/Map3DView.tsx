@@ -14,8 +14,19 @@ export default function Map3DView({ center, map, onClose }: Map3DViewProps) {
     useEffect(() => {
         if (!map) return;
 
+        // Switch to satellite for 3D buildings
+        map.setMapTypeId('satellite');
+
         // Enable 3D tilt
         map.setTilt(45);
+
+        // Enable rotation control
+        map.setOptions({
+            rotateControl: true,
+            rotateControlOptions: {
+                position: google.maps.ControlPosition.LEFT_CENTER,
+            },
+        });
 
         // Smooth animation to the center with tilt
         map.panTo(center);
@@ -28,10 +39,14 @@ export default function Map3DView({ center, map, onClose }: Map3DViewProps) {
 
         setIsReady(true);
 
-        // Cleanup: reset tilt when component unmounts
+        // Cleanup: reset to 2D mode when component unmounts
         return () => {
             if (map) {
                 map.setTilt(0);
+                map.setMapTypeId('roadmap');
+                map.setOptions({
+                    rotateControl: false,
+                });
             }
         };
     }, [map, center]);
