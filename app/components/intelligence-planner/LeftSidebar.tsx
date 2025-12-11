@@ -1,13 +1,31 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, Battery, MapPin, Plus } from 'lucide-react';
+import { LayerState } from '@/app/types/intelligence-planner';
 
 interface LeftSidebarProps {
     isOpen: boolean;
     onToggle: () => void;
+    layers: LayerState;
+    onLayerToggle: (layer: keyof LayerState) => void;
+    stationCounts: {
+        spklu: number;
+        spbklu: number;
+        candidates: number;
+    };
+    isAddingCandidate: boolean;
+    onToggleAddMode: () => void;
 }
 
-export default function LeftSidebar({ isOpen, onToggle }: LeftSidebarProps) {
+export default function LeftSidebar({
+    isOpen,
+    onToggle,
+    layers,
+    onLayerToggle,
+    stationCounts,
+    isAddingCandidate,
+    onToggleAddMode,
+}: LeftSidebarProps) {
     return (
         <div
             className={`relative h-full bg-white border-r border-gray-200 transition-all duration-300 ${isOpen ? 'w-80' : 'w-12'
@@ -27,44 +45,102 @@ export default function LeftSidebar({ isOpen, onToggle }: LeftSidebarProps) {
             </button>
 
             {/* Sidebar Content */}
-            <div className={`h-full overflow-hidden ${isOpen ? 'p-4' : 'p-2'}`}>
+            <div className={`h-full overflow-y-auto ${isOpen ? 'p-4' : 'p-2'}`}>
                 {isOpen ? (
                     <div className="space-y-4">
                         <div>
                             <h2 className="text-lg font-semibold text-gray-800 mb-2">
                                 Kontrol Peta
                             </h2>
-                            <p className="text-sm text-gray-600">
-                                Panel kontrol untuk analisis lokasi dan layer data.
-                            </p>
+
+                            {/* Add Candidate Button */}
+                            <button
+                                onClick={onToggleAddMode}
+                                className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm transition-all ${isAddingCandidate
+                                        ? 'bg-orange-500 text-white hover:bg-orange-600'
+                                        : 'bg-[var(--color-light-blue)] text-white hover:opacity-90'
+                                    }`}
+                            >
+                                <Plus className="w-4 h-4" />
+                                {isAddingCandidate ? 'Klik Peta untuk Menambah' : 'Tambah Lokasi Kandidat'}
+                            </button>
+
+                            {isAddingCandidate && (
+                                <p className="text-xs text-orange-600 mt-2 text-center animate-pulse">
+                                    Klik lokasi di peta untuk menambahkan kandidat
+                                </p>
+                            )}
                         </div>
 
-                        {/* Placeholder for future controls */}
+                        {/* Layer Toggles */}
                         <div className="glass-panel p-4 rounded-lg">
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                Konteks Analisis
+                            <h3 className="text-sm font-medium text-gray-700 mb-3">
+                                Layer Peta
                             </h3>
-                            <p className="text-xs text-gray-500">
-                                Pengaturan area fokus dan tujuan analisis akan ditampilkan di sini.
-                            </p>
+                            <div className="space-y-3">
+                                {/* SPKLU Layer */}
+                                <label className="flex items-center justify-between cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={layers.spklu}
+                                            onChange={() => onLayerToggle('spklu')}
+                                            className="w-4 h-4 text-blue-500 rounded focus:ring-2 focus:ring-blue-500"
+                                        />
+                                        <Zap className="w-4 h-4 text-blue-500" />
+                                        <span className="text-sm text-gray-700">SPKLU</span>
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                        {stationCounts.spklu}
+                                    </span>
+                                </label>
+
+                                {/* SPBKLU Layer */}
+                                <label className="flex items-center justify-between cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={layers.spbklu}
+                                            onChange={() => onLayerToggle('spbklu')}
+                                            className="w-4 h-4 text-green-500 rounded focus:ring-2 focus:ring-green-500"
+                                        />
+                                        <Battery className="w-4 h-4 text-green-500" />
+                                        <span className="text-sm text-gray-700">SPBKLU</span>
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                        {stationCounts.spbklu}
+                                    </span>
+                                </label>
+
+                                {/* Candidates Layer */}
+                                <label className="flex items-center justify-between cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={layers.candidates}
+                                            onChange={() => onLayerToggle('candidates')}
+                                            className="w-4 h-4 text-orange-500 rounded focus:ring-2 focus:ring-orange-500"
+                                        />
+                                        <MapPin className="w-4 h-4 text-orange-500" />
+                                        <span className="text-sm text-gray-700">Kandidat</span>
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                        {stationCounts.candidates}
+                                    </span>
+                                </label>
+                            </div>
                         </div>
 
+                        {/* Info */}
                         <div className="glass-panel p-4 rounded-lg">
                             <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                Layer Data
+                                Petunjuk
                             </h3>
-                            <p className="text-xs text-gray-500">
-                                Toggle untuk layer POI, permintaan, kompetisi, dan grid akan ditambahkan di sini.
-                            </p>
-                        </div>
-
-                        <div className="glass-panel p-4 rounded-lg">
-                            <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                Daftar Lokasi
-                            </h3>
-                            <p className="text-xs text-gray-500">
-                                Lokasi kandidat yang ditambahkan akan muncul di sini.
-                            </p>
+                            <ul className="text-xs text-gray-600 space-y-1">
+                                <li>• Klik peta untuk menambah lokasi kandidat</li>
+                                <li>• Klik marker untuk melihat detail</li>
+                                <li>• Toggle layer untuk show/hide marker</li>
+                            </ul>
                         </div>
                     </div>
                 ) : (
