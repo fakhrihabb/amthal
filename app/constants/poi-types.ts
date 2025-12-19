@@ -3,35 +3,35 @@ import { POITypeConfig } from '@/app/types/poi';
 export const POI_TYPES: Record<string, POITypeConfig> = {
     SHOPPING_MALL: {
         id: 'shopping_mall',
-        label: 'Pusat Perbelanjaan',
+        label: 'Shopping Mall',
         icon: '🏬',
         color: '#3B82F6', // Blue
         googlePlaceType: 'shopping_mall'
     },
     UNIVERSITY: {
         id: 'university',
-        label: 'Universitas',
+        label: 'University',
         icon: '🎓',
         color: '#8B5CF6', // Purple
         googlePlaceType: 'university'
     },
     PARKING: {
         id: 'parking',
-        label: 'Area Parkir',
+        label: 'Parking Area',
         icon: '🅿️',
         color: '#10B981', // Green
         googlePlaceType: 'parking'
     },
     REST_STOP: {
         id: 'rest_stop',
-        label: 'Area Istirahat',
+        label: 'Rest Area',
         icon: '🛑',
         color: '#F59E0B', // Orange
         googlePlaceType: 'rest_stop'
     },
     TRANSIT_STATION: {
         id: 'transit_station',
-        label: 'Stasiun Transit',
+        label: 'Transit Station',
         icon: '🚉',
         color: '#EF4444', // Red
         googlePlaceType: 'transit_station'

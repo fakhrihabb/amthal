@@ -35,7 +35,7 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                             <button
                                 onClick={() => handleTilt('down')}
                                 className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                title="Miringkan Bawah (Lebih Datar)"
+                                title="Tilt Down (Flatter)"
                             >
                                 <ChevronUp className="w-5 h-5 text-gray-700" />
                             </button>
@@ -43,7 +43,7 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                             <button
                                 onClick={() => handleTilt('up')}
                                 className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                title="Miringkan Atas (Lebih 3D)"
+                                title="Tilt Up (More 3D)"
                             >
                                 <ChevronDown className="w-5 h-5 text-gray-700" />
                             </button>
@@ -54,7 +54,7 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                             <button
                                 onClick={() => handleRotate('ccw')}
                                 className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                title="Putar Kiri"
+                                title="Rotate Left"
                             >
                                 <RotateCcw className="w-5 h-5 text-gray-700" />
                             </button>
@@ -62,7 +62,7 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                             <button
                                 onClick={() => handleRotate('cw')}
                                 className="p-2 hover:bg-gray-100 rounded-md transition-colors"
-                                title="Putar Kanan"
+                                title="Rotate Right"
                             >
                                 <RotateCw className="w-5 h-5 text-gray-700" />
                             </button>
@@ -76,7 +76,7 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                         map?.setHeading(0);
                     }}
                     className="glass-panel p-2 rounded-lg hover:bg-white/90 transition-all shadow-md"
-                    title="Reset Kompas (Utara)"
+                    title="Reset Compass (North)"
                 >
                     <Compass className="w-6 h-6 text-[var(--color-light-blue)]" />
                 </button>
@@ -87,9 +87,9 @@ export default function Map3DView({ map, is3DMode }: Map3DViewProps) {
                     {/* Instructions */}
                     <div className="glass-panel px-4 py-2 rounded-lg max-w-xs">
                         <p className="text-xs text-gray-600">
-                            <strong>Kontrol 3D:</strong><br />
-                            • Shift + Drag: Putar peta<br />
-                            • Gunakan kompas di kanan untuk rotasi
+                            <strong>3D Controls:</strong><br />
+                            • Shift + Drag: Rotate map<br />
+                            • Use compass on right to rotate
                         </p>
                     </div>
                 </div>

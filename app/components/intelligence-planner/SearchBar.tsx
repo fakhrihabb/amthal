@@ -12,7 +12,7 @@ interface SearchBarProps {
 
 export default function SearchBar({
     onLocationSelect,
-    placeholder = 'Cari alamat, tempat, atau koordinat...'
+    placeholder = 'Search for address, place, or coordinates...'
 }: SearchBarProps) {
     const [searchValue, setSearchValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +21,8 @@ export default function SearchBar({
     const handleLoad = useCallback((autocomplete: google.maps.places.Autocomplete) => {
         autocompleteRef.current = autocomplete;
 
-        // Restrict to Indonesia
-        autocomplete.setComponentRestrictions({ country: 'id' });
+        // Restrict to Saudi Arabia (SA) since we are focusing on Riyadh
+        autocomplete.setComponentRestrictions({ country: 'sa' });
 
         // Set fields to retrieve
         autocomplete.setFields(['formatted_address', 'geometry', 'name']);
@@ -37,7 +37,7 @@ export default function SearchBar({
             const location = {
                 lat: place.geometry.location.lat(),
                 lng: place.geometry.location.lng(),
-                address: place.formatted_address || place.name || 'Lokasi tidak diketahui'
+                address: place.formatted_address || place.name || 'Unknown location'
             };
 
             onLocationSelect(location);
@@ -109,7 +109,7 @@ export default function SearchBar({
                         <button
                             onClick={handleClear}
                             className="absolute inset-y-0 right-0 pr-3 flex items-center hover:bg-gray-100 rounded-r-lg transition-colors"
-                            aria-label="Hapus pencarian"
+                            aria-label="Clear search"
                         >
                             <X className="w-5 h-5 text-gray-400 hover:text-gray-600" />
                         </button>
@@ -120,7 +120,7 @@ export default function SearchBar({
             {/* Hint for coordinate search */}
             {searchValue && isCoordinateString(searchValue) && (
                 <div className="mt-2 bg-blue-50 border border-blue-200 rounded-lg p-2 text-xs text-blue-800">
-                    💡 Tekan Enter untuk mencari koordinat
+                    💡 Press Enter to search coordinates
                 </div>
             )}
         </div>

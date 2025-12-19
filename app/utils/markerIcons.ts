@@ -35,12 +35,12 @@ export const getCandidateMarkerColor = (score?: number): string => {
  * Generate custom marker icons for different station types
  */
 export const getMarkerIcon = (
-  type: 'SPKLU' | 'SPBKLU' | 'CANDIDATE',
+  type: 'CHARGING_STATION' | 'BATTERY_SWAP_STATION' | 'CANDIDATE',
   score?: number // For candidates only
 ): google.maps.Icon => {
   const colors = {
-    SPKLU: '#0EA5E9', // Blue (brand color)
-    SPBKLU: '#10B981', // Green
+    CHARGING_STATION: '#0EA5E9', // Blue (brand color)
+    BATTERY_SWAP_STATION: '#10B981', // Green
     CANDIDATE: getCandidateMarkerColor(score), // Dynamic based on score
   };
 

@@ -13,7 +13,7 @@ export default function View3DToggle({ is3DMode, onToggle }: View3DToggleProps) 
             onClick={onToggle}
             data-html2canvas-ignore="true"
             className="absolute bottom-4 left-4 z-10 glass-panel px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-white/90 transition-all shadow-md hover:shadow-lg group"
-            title={is3DMode ? 'Kembali ke 2D' : 'Lihat 3D'}
+            title={is3DMode ? 'Switch to 2D' : 'Switch to 3D'}
         >
             {is3DMode ? (
                 <>

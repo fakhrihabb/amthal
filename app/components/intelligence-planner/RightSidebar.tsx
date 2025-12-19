@@ -37,25 +37,25 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                 <button
                                     onClick={onToggle}
                                     className="absolute left-0 top-0 w-8 h-8 border-2 border-[var(--color-light-blue)] rounded-lg flex items-center justify-center hover:bg-[var(--color-light-blue)] hover:text-white transition-all group"
-                                    aria-label="Tutup panel hasil"
+                                    aria-label="Close results panel"
                                 >
                                     <ChevronRight className="w-4 h-4 text-[var(--color-light-blue)] group-hover:text-white" />
                                 </button>
                                 <h2 className="text-lg font-semibold text-gray-800 text-center">
-                                    Hasil Analisis
+                                    Analysis Results
                                 </h2>
                             </div>
 
                             <div>
                                 <p className="text-sm text-gray-600 text-center">
-                                    {analysisResults ? 'Hasil analisis lokasi telah selesai.' : 'Hasil analisis lokasi akan ditampilkan di sini.'}
+                                    {analysisResults ? 'Location analysis completed.' : 'Location analysis results will appear here.'}
                                 </p>
                             </div>
 
                             {isAnalyzing && (
                                 <div className="glass-panel p-6 rounded-lg flex flex-col items-center justify-center">
                                     <Loader2 className="w-8 h-8 animate-spin text-[var(--color-light-blue)] mb-2" />
-                                    <p className="text-sm text-gray-600">Menganalisis lokasi...</p>
+                                    <p className="text-sm text-gray-600">Analyzing location...</p>
                                 </div>
                             )}
 
@@ -64,11 +64,11 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                     {/* Scores Section */}
                                     <div className="glass-panel p-4 rounded-lg">
                                         <h3 className="text-sm font-medium text-gray-700 mb-3">
-                                            Skor Kesesuaian
+                                            Suitability Scores
                                         </h3>
                                         <div className="space-y-2">
                                             <div className="flex justify-between items-center">
-                                                <span className="text-xs text-gray-600">Permintaan</span>
+                                                <span className="text-xs text-gray-600">Demand</span>
                                                 <span className={`text-xs font-medium ${scores.demand >= 70 ? 'text-green-600' : scores.demand >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
                                                     {scores.demand}/100
                                                 </span>
@@ -80,13 +80,13 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                                 </span>
                                             </div>
                                             <div className="flex justify-between items-center">
-                                                <span className="text-xs text-gray-600">Aksesibilitas</span>
+                                                <span className="text-xs text-gray-600">Accessibility</span>
                                                 <span className={`text-xs font-medium ${scores.accessibility >= 70 ? 'text-green-600' : scores.accessibility >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
                                                     {scores.accessibility}/100
                                                 </span>
                                             </div>
                                             <div className="flex justify-between items-center">
-                                                <span className="text-xs text-gray-600">Kompetisi</span>
+                                                <span className="text-xs text-gray-600">Competition</span>
                                                 <span className={`text-xs font-medium ${scores.competition >= 70 ? 'text-green-600' : scores.competition >= 50 ? 'text-yellow-600' : 'text-red-600'}`}>
                                                     {scores.competition}/100
                                                 </span>
@@ -122,7 +122,7 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                     {insights && (
                                         <div className="glass-panel p-4 rounded-lg">
                                             <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                                Wawasan AI
+                                                AI Insights
                                             </h3>
                                             <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line">
                                                 {insights}
@@ -134,7 +134,7 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                     {recommendation && (
                                         <div className="glass-panel p-4 rounded-lg">
                                             <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                                Rekomendasi
+                                                Recommendation
                                             </h3>
                                             <div className="mb-3">
                                                 <span className="inline-block px-3 py-1 bg-[var(--color-light-blue)] text-white text-xs font-medium rounded-full">
@@ -160,7 +160,7 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                 <div className="glass-panel p-6 rounded-lg text-center">
                                     <BarChart3 className="w-12 h-12 mx-auto mb-2 text-gray-300" />
                                     <p className="text-sm text-gray-500">
-                                        Klik marker kandidat dan pilih "Analisis" untuk memulai
+                                        Click a candidate marker and select "Analyze" to start
                                     </p>
                                 </div>
                             )}
@@ -174,7 +174,7 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                                     className="w-full px-4 py-3 bg-[#134474] text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#0D263F] transition-all shadow-md active:scale-95"
                                 >
                                     <Save className="w-4 h-4" />
-                                    Simpan ke Proyek
+                                    Save to Project
                                 </button>
                             </div>
                         )}
@@ -184,7 +184,7 @@ export default function RightSidebar({ isOpen, onToggle, analysisResults, isAnal
                         <button
                             onClick={onToggle}
                             className="w-8 h-8 border-2 border-[var(--color-light-blue)] rounded-lg flex items-center justify-center hover:bg-[var(--color-light-blue)] hover:text-white transition-all group"
-                            aria-label="Buka panel hasil"
+                            aria-label="Open results panel"
                         >
                             <ChevronLeft className="w-4 h-4 text-[var(--color-light-blue)] group-hover:text-white" />
                         </button>

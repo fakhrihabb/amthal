@@ -10,8 +10,8 @@ interface StationInfoWindowProps {
 }
 
 export default function StationInfoWindow({ station, onClose }: StationInfoWindowProps) {
-    const Icon = station.type === 'SPKLU' ? Zap : Battery;
-    const iconColor = station.type === 'SPKLU' ? 'text-[#3b82f6]' : 'text-[#22c55e]';
+    const Icon = station.type === 'CHARGING_STATION' ? Zap : Battery;
+    const iconColor = station.type === 'CHARGING_STATION' ? 'text-[#3b82f6]' : 'text-[#22c55e]';
 
     return (
         <InfoWindow
@@ -39,11 +39,13 @@ export default function StationInfoWindow({ station, onClose }: StationInfoWindo
                 {/* Details */}
                 <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
-                        <span className="text-[#4b5563]">Tipe:</span>
-                        <span className="font-medium text-[#1f2937]">{station.type}</span>
+                        <span className="text-[#4b5563]">Type:</span>
+                        <span className="font-medium text-[#1f2937]">
+                            {station.type === 'CHARGING_STATION' ? 'Charging Station' : 'Battery Swap Station'}
+                        </span>
                     </div>
                     <div className="flex justify-between">
-                        <span className="text-[#4b5563]">Kapasitas:</span>
+                        <span className="text-[#4b5563]">Capacity:</span>
                         <span className="font-medium text-[#1f2937]">
                             {station.capacity} charger{station.capacity > 1 ? 's' : ''}
                         </span>

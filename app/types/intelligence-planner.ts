@@ -3,7 +3,7 @@ import { POI } from './poi';
 export interface Station {
     id: string;
     name: string;
-    type: 'SPKLU' | 'SPBKLU';
+    type: 'CHARGING_STATION' | 'BATTERY_SWAP_STATION';
     latitude: number;
     longitude: number;
     capacity: number; // Number of chargers
@@ -21,8 +21,8 @@ export interface CandidateLocation {
 }
 
 export interface LayerState {
-    spklu: boolean;
-    spbklu: boolean;
+    charging_station: boolean;
+    battery_swap_station: boolean;
     candidates: boolean;
     poi: boolean;
 }

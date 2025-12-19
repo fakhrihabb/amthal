@@ -64,12 +64,12 @@ export default function POIFilterPanel({
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <MapPin size={20} className="text-white" />
-                        <h3 className="font-semibold text-white">Layer POI</h3>
+                        <h3 className="font-semibold text-white">POI Layer</h3>
                     </div>
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
                         className="text-white hover:bg-white/20 rounded p-1 transition-colors"
-                        aria-label={isExpanded ? 'Ciutkan' : 'Perluas'}
+                        aria-label={isExpanded ? 'Collapse' : 'Expand'}
                     >
                         {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                     </button>
@@ -85,7 +85,7 @@ export default function POIFilterPanel({
                             className="w-4 h-4 rounded border-white/30 bg-white/20 text-[var(--color-dark-blue)] focus:ring-2 focus:ring-white/50"
                         />
                         <span className="text-sm text-white font-medium">
-                            Tampilkan POI
+                            Show POI
                         </span>
                     </label>
                     {filterState.enabled && (
@@ -103,15 +103,15 @@ export default function POIFilterPanel({
                     <div>
                         <div className="flex items-center justify-between mb-3">
                             <h4 className="text-sm font-semibold text-gray-700">
-                                Kategori POI
+                                POI Categories
                             </h4>
                             <button
                                 onClick={handleSelectAll}
                                 className="text-xs text-[var(--color-light-blue)] hover:text-[var(--color-dark-blue)] font-medium transition-colors"
                             >
                                 {selectedCount === Object.keys(filterState.categories).length
-                                    ? 'Hapus Semua'
-                                    : 'Pilih Semua'}
+                                    ? 'Unselect All'
+                                    : 'Select All'}
                             </button>
                         </div>
 
@@ -143,7 +143,7 @@ export default function POIFilterPanel({
                     {/* Radius Selector */}
                     <div>
                         <h4 className="text-sm font-semibold text-gray-700 mb-3">
-                            Radius Pencarian
+                            Search Radius
                         </h4>
                         <div className="grid grid-cols-2 gap-2">
                             {POI_RADIUS_OPTIONS.map((option) => (
@@ -151,8 +151,8 @@ export default function POIFilterPanel({
                                     key={option.value}
                                     onClick={() => handleRadiusChange(option.value)}
                                     className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${filterState.radius === option.value
-                                            ? 'bg-[var(--color-light-blue)] text-white shadow-md'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        ? 'bg-[var(--color-light-blue)] text-white shadow-md'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                 >
                                     {option.label}
@@ -160,14 +160,14 @@ export default function POIFilterPanel({
                             ))}
                         </div>
                         <p className="text-xs text-gray-500 mt-2">
-                            POI dalam radius {POI_RADIUS_OPTIONS.find(o => o.value === filterState.radius)?.label} dari lokasi kandidat
+                            POIs within {POI_RADIUS_OPTIONS.find(o => o.value === filterState.radius)?.label} radius from candidate location
                         </p>
                     </div>
 
                     {/* Info */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                         <p className="text-xs text-blue-800">
-                            💡 <strong>Tips:</strong> Tambahkan lokasi kandidat di peta untuk melihat POI di sekitarnya
+                            💡 <strong>Tip:</strong> Add candidate location on map to see surrounding POIs
                         </p>
                     </div>
                 </div>
