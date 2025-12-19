@@ -38,7 +38,7 @@ export default function WhySivana() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        Why <span className="gradient-text">SIVANA</span>?
+                        Why <span className="gradient-text">Amthal</span>?
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         A complete platform simplifying the EV infrastructure planning process with the latest technology

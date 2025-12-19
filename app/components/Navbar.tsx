@@ -39,9 +39,9 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1">
             {/* Logo SVG */}
-            <img src="/branding/logo.svg" alt="SIVANA Logo" className="h-10 w-10" />
+            <img src="/branding/logo.svg" alt="Amthal Logo" className="h-10 w-10" />
             {/* Text */}
-            <span className={`text-2xl font-extrabold italic ${logoTextClasses}`} style={{ fontFamily: 'Inter, sans-serif' }}>SIVANA</span>
+            <span className={`text-2xl font-extrabold italic ${logoTextClasses}`} style={{ fontFamily: 'Inter, sans-serif' }}>Amthal</span>
           </Link>
 
           {/* Navigation Links */}

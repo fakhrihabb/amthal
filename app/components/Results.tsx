@@ -33,7 +33,7 @@ export default function Results() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        <span className="gradient-text">SIVANA</span> Results
+                        <span className="gradient-text">Amthal</span> Results
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                         Transformation from traditional planning to AI-driven planning
@@ -54,7 +54,7 @@ export default function Results() {
                                 <X className="w-6 h-6 text-red-600" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-800">Before SIVANA</h3>
+                                <h3 className="text-2xl font-bold text-gray-800">Before Amthal</h3>
                                 <p className="text-sm text-gray-600">Traditional Planning</p>
                             </div>
                         </div>
@@ -98,7 +98,7 @@ export default function Results() {
                                 <Check className="w-6 h-6 text-green-600" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-800">With SIVANA</h3>
+                                <h3 className="text-2xl font-bold text-gray-800">With Amthal</h3>
                                 <p className="text-sm text-gray-600">Modern Planning</p>
                             </div>
                         </div>

@@ -39,7 +39,7 @@ export default function CTA() {
                         transition={{ delay: 0.3, duration: 0.6 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
                     >
-                        Ready to Try SIVANA?
+                        Ready to Try Amthal?
                     </motion.h2>
 
                     <motion.p
