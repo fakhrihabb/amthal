@@ -6,32 +6,32 @@ import { useState } from 'react';
 
 const faqs = [
     {
-        question: 'Apa itu SIVANA?',
-        answer: 'SIVANA (Sistem Intelijen EV untuk Analitik Lokasi SPKLU dan SPBKLU Nasional) adalah platform perencanaan berbasis web yang membantu stakeholder mengidentifikasi, menganalisis, dan mengusulkan lokasi optimal untuk infrastruktur pengisian kendaraan listrik di Indonesia.',
+        question: 'What is SIVANA?',
+        answer: 'SIVANA (EV Intelligence System for Global EV Charger Location Analytics) is a web-based planning platform that helps stakeholders identify, analyze, and propose optimal locations for EV charging infrastructure globally.',
     },
     {
-        question: 'Siapa yang bisa menggunakan SIVANA?',
-        answer: 'SIVANA dirancang untuk perencana infrastruktur pemerintah, investor swasta, pengembang, koordinator regional, dan konsultan yang terlibat dalam perencanaan infrastruktur EV.',
+        question: 'Who can use SIVANA?',
+        answer: 'SIVANA is designed for government infrastructure planners, private investors, developers, regional coordinators, and consultants involved in EV infrastructure planning.',
     },
     {
-        question: 'Apakah SIVANA gratis?',
-        answer: 'Untuk versi MVP hackathon ini, SIVANA dapat diakses secara terbuka tanpa memerlukan registrasi atau login. Proyek disimpan di browser lokal Anda.',
+        question: 'Is SIVANA free?',
+        answer: 'For this MVP hackathon version, SIVANA can be accessed openly without requiring registration or login. Projects are saved in your local browser.',
     },
     {
-        question: 'Data apa saja yang digunakan untuk analisis?',
-        answer: 'SIVANA mengintegrasikan data dari Google Maps (POI, rute, jarak), data grid PLN (kapasitas), data populasi BPS, dan registrasi SPKLU/SPBKLU nasional untuk memberikan analisis komprehensif.',
+        question: 'What data is used for analysis?',
+        answer: 'SIVANA integrates data from Google Maps (POI, routes, distances), PLN grid data (capacity), BPS population data, and national EV charger registries to provide comprehensive analysis.',
     },
     {
-        question: 'Berapa lama waktu yang dibutuhkan untuk menganalisis satu lokasi?',
-        answer: 'Analisis satu lokasi biasanya selesai dalam waktu kurang dari 15 menit, termasuk perhitungan skor, rekomendasi AI, dan estimasi finansial.',
+        question: 'How long does it take to analyze one location?',
+        answer: 'Analysis for one location typically takes less than 15 minutes, including score calculation, AI recommendations, and financial estimation.',
     },
     {
-        question: 'Apakah saya bisa membandingkan beberapa lokasi sekaligus?',
-        answer: 'Ya! Anda dapat menambahkan beberapa lokasi kandidat ke dalam satu Proyek dan membandingkannya secara side-by-side dengan tabel perbandingan dan grafik.',
+        question: 'Can I compare multiple locations at once?',
+        answer: 'Yes! You can add multiple candidate locations to a Project and compare them side-by-side with comparison tables and charts.',
     },
     {
-        question: 'Format apa yang tersedia untuk laporan?',
-        answer: 'Laporan dapat diekspor dalam format PDF yang profesional, lengkap dengan visualisasi peta, analisis, rekomendasi, dan estimasi finansial.',
+        question: 'What formats are available for reports?',
+        answer: 'Reports can be exported in professional PDF format, complete with map visualizations, analysis, recommendations, and financial estimates.',
     },
 ];
 
@@ -53,10 +53,10 @@ export default function FAQ() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        Pertanyaan <span className="gradient-text">Umum</span>
+                        Frequently Asked <span className="gradient-text">Questions</span>
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Temukan jawaban untuk pertanyaan yang sering diajukan
+                        Find answers to common questions
                     </p>
                 </motion.div>
 

@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SIVANA - Sistem Intelijen EV untuk Analitik Lokasi SPKLU dan SPBKLU",
-  description: "Platform perencanaan berbasis AI untuk infrastruktur pengisian kendaraan listrik di Indonesia",
+  title: "SIVANA - EV Intelligence System for Global EV Charger Location Analytics",
+  description: "AI-powered planning platform for electric vehicle charging infrastructure globally",
   icons: {
     icon: '/branding/logo.svg',
   },
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

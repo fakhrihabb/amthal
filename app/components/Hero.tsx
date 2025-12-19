@@ -41,7 +41,7 @@ export default function Hero() {
                             transition={{ delay: 0.4, duration: 0.8 }}
                             className="text-xl md:text-2xl mb-8 text-white/90 font-bold"
                         >
-                            Sistem Intelijen EV untuk Analitik Lokasi SPKLU dan SPBKLU Nasional
+                            EV Intelligence System for Global EV Charger Location Analytics
                         </motion.p>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
@@ -49,7 +49,7 @@ export default function Hero() {
                             transition={{ delay: 0.6, duration: 0.8 }}
                             className="text-lg mb-10 text-white/80 max-w-xl"
                         >
-                            Platform perencanaan berbasis AI yang membantu Anda menemukan, menganalisis, dan mengusulkan lokasi optimal untuk infrastruktur pengisian kendaraan listrik di seluruh Indonesia.
+                            AI-powered planning platform that helps you discover, analyze, and propose optimal locations for EV charging infrastructure globally.
                         </motion.p>
 
                         {/* CTA Buttons */}
@@ -63,14 +63,14 @@ export default function Hero() {
                                 href="/intelligence-planner"
                                 className="group px-8 py-4 bg-white text-[var(--color-blue)] rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-white/90 transition-all hover:scale-105 shadow-xl"
                             >
-                                Coba Demo
+                                Try Demo
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Link>
                             <button
                                 onClick={scrollToNext}
                                 className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-white/20 transition-all border border-white/30"
                             >
-                                Selengkapnya
+                                Learn More
                                 <ChevronDown className="w-5 h-5" />
                             </button>
                         </motion.div>
@@ -103,7 +103,7 @@ export default function Hero() {
                             transition={{ delay: 1, duration: 0.6 }}
                             className="absolute -top-6 -right-6 glass-card p-4 bg-white"
                         >
-                            <p className="text-sm text-gray-600">Waktu Analisis</p>
+                            <p className="text-sm text-gray-600">Analysis Time</p>
                             <p className="text-2xl font-bold text-[var(--color-blue)]">&lt; 15 min</p>
                         </motion.div>
                     </motion.div>

@@ -6,23 +6,23 @@ import { Map, Brain, BarChart3, FileText } from 'lucide-react';
 const benefits = [
     {
         icon: Map,
-        title: 'Visualisasi Interaktif 2D & 3D',
-        description: 'Jelajahi lokasi kandidat dengan peta interaktif dan tampilan 3D realistis untuk pemahaman konteks yang lebih baik.',
+        title: 'Interactive 2D & 3D Visualization',
+        description: 'Explore candidate locations with interactive maps and realistic 3D views for better context understanding.',
     },
     {
         icon: Brain,
-        title: 'Analisis Berbasis AI',
-        description: 'Dapatkan wawasan mendalam dengan teknologi Gemini AI yang menganalisis permintaan, aksesibilitas, dan kelayakan lokasi.',
+        title: 'AI-Based Analysis',
+        description: 'Gain deep insights with Gemini AI technology that analyzes demand, accessibility, and location feasibility.',
     },
     {
         icon: BarChart3,
-        title: 'Rekomendasi Berbasis Data',
-        description: 'Keputusan didukung oleh data real-time dari Google Maps, POI, dan analisis grid untuk hasil yang akurat.',
+        title: 'Data-Driven Recommendations',
+        description: 'Decisions backed by real-time data from Google Maps, POIs, and grid analysis for accurate results.',
     },
     {
         icon: FileText,
-        title: 'Laporan Otomatis',
-        description: 'Hasilkan laporan profesional siap pakai dalam format PDF untuk presentasi dan pengajuan proposal.',
+        title: 'Automated Reporting',
+        description: 'Generate professional ready-to-use reports in PDF format for presentations and proposal submissions.',
     },
 ];
 
@@ -38,10 +38,10 @@ export default function WhySivana() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        Kenapa <span className="gradient-text">SIVANA</span>?
+                        Why <span className="gradient-text">SIVANA</span>?
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Platform lengkap yang menyederhanakan proses perencanaan infrastruktur EV dengan teknologi terkini
+                        A complete platform simplifying the EV infrastructure planning process with the latest technology
                     </p>
                 </motion.div>
 

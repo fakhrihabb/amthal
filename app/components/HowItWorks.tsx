@@ -7,26 +7,26 @@ const steps = [
     {
         number: '01',
         icon: Search,
-        title: 'Eksplorasi Lokasi',
-        description: 'Gunakan Intelligence Planner untuk menjelajahi peta 2D/3D, melihat SPKLU/SPBKLU yang ada, dan menambahkan lokasi kandidat.',
+        title: 'Location Exploration',
+        description: 'Use the Intelligence Planner to explore 2D/3D maps, view existing EV chargers, and add candidate locations.',
     },
     {
         number: '02',
         icon: Lightbulb,
-        title: 'Analisis AI',
-        description: 'Sistem menganalisis permintaan, aksesibilitas, kesiapan grid, dan kompetisi. AI Gemini memberikan wawasan mendalam.',
+        title: 'AI Analysis',
+        description: 'The system analyzes demand, accessibility, grid readiness, and competition. Gemini AI provides deep insights.',
     },
     {
         number: '03',
         icon: Save,
-        title: 'Simpan Proyek',
-        description: 'Simpan lokasi yang menjanjikan ke dalam Proyek untuk perbandingan dan dokumentasi lebih lanjut.',
+        title: 'Save Project',
+        description: 'Save promising locations to Projects for further comparison and documentation.',
     },
     {
         number: '04',
         icon: FileCheck,
-        title: 'Buat Laporan',
-        description: 'Hasilkan laporan profesional dengan satu klik, lengkap dengan visualisasi, analisis, dan rekomendasi.',
+        title: 'Generate Report',
+        description: 'Generate professional reports with one click, complete with visualizations, analysis, and recommendations.',
     },
 ];
 
@@ -42,10 +42,10 @@ export default function HowItWorks() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        Bagaimana <span className="gradient-text">Cara Kerjanya</span>?
+                        How <span className="gradient-text">It Works</span>?
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Proses sederhana dari eksplorasi hingga laporan final
+                        Simple process from exploration to final report
                     </p>
                 </motion.div>
 

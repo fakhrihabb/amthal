@@ -14,27 +14,27 @@ export default function Footer() {
                             <span className="text-xl font-bold">SIVANA</span>
                         </div>
                         <p className="text-white/70 text-sm">
-                            Sistem Intelijen EV untuk Analitik Lokasi SPKLU dan SPBKLU Nasional
+                            EV Intelligence System for Global EV Charger Location Analytics
                         </p>
                     </div>
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="font-semibold mb-4">Tautan Cepat</h3>
+                        <h3 className="font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2 text-sm text-white/70">
                             <li>
                                 <a href="#kenapa-sivana" className="hover:text-white transition-colors">
-                                    Kenapa SIVANA?
+                                    Why SIVANA?
                                 </a>
                             </li>
                             <li>
                                 <a href="#cara-kerja" className="hover:text-white transition-colors">
-                                    Cara Kerja
+                                    How it Works
                                 </a>
                             </li>
                             <li>
                                 <a href="#hasil" className="hover:text-white transition-colors">
-                                    Hasil SIVANA
+                                    SIVANA Results
                                 </a>
                             </li>
                             <li>
@@ -47,7 +47,7 @@ export default function Footer() {
 
                     {/* Info */}
                     <div>
-                        <h3 className="font-semibold mb-4">Informasi</h3>
+                        <h3 className="font-semibold mb-4">Information</h3>
                         <p className="text-sm text-white/70">
                             Powered by Google Cloud Platform
                         </p>
