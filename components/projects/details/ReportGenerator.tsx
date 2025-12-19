@@ -127,7 +127,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         // Footer text
         doc.setFontSize(8);
         doc.setTextColor(...BRAND.gray500);
-        doc.text(`SIVANA Platform`, MARGIN.left, pageHeight - 6);
+        doc.text(`Amthal Platform`, MARGIN.left, pageHeight - 6);
         doc.text(`Halaman ${pageNum} dari ${totalPages}`, pageWidth / 2, pageHeight - 6, { align: "center" });
         doc.text(dateStr, pageWidth - MARGIN.right, pageHeight - 6, { align: "right" });
       };
@@ -167,7 +167,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
       // Bottom branding
       doc.setFontSize(10);
       doc.setTextColor(...BRAND.gray500);
-      doc.text("Dibuat oleh SIVANA Platform", pageWidth / 2, pageHeight - 30, { align: "center" });
+      doc.text("Dibuat oleh Amthal Platform", pageWidth / 2, pageHeight - 30, { align: "center" });
 
       // Bottom accent
       doc.setFillColor(...BRAND.lightBlue);

@@ -33,16 +33,9 @@ export default function Hero() {
                             transition={{ delay: 0.2, duration: 0.8 }}
                             className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
                         >
-                            SIVANA
+                            Amthal
                         </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.8 }}
-                            className="text-xl md:text-2xl mb-8 text-white/90 font-bold"
-                        >
-                            EV Intelligence System for Global EV Charger Location Analytics
-                        </motion.p>
+
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -86,11 +79,11 @@ export default function Hero() {
                         <div className="glass-card p-8 backdrop-blur-xl bg-white/10">
                             <div className="aspect-square bg-gradient-to-br from-white/20 to-white/5 rounded-2xl flex items-center justify-center overflow-hidden">
                                 <Image
-                                    src="/branding/hero.png"
-                                    alt="SIVANA - Visualisasi Interaktif 2D & 3D Maps"
+                                    src="/branding/hero.jpg"
+                                    alt="Amthal - Visualisasi Interaktif 2D & 3D Maps"
                                     width={500}
                                     height={500}
-                                    className="w-full h-full object-contain"
+                                    className="w-full h-full object-cover"
                                     priority
                                 />
                             </div>
