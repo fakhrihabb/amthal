@@ -39,7 +39,7 @@ export default function CTA() {
                         transition={{ delay: 0.3, duration: 0.6 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
                     >
-                        Ready to Try SIVANA?
+                        Ready to Try Amthal?
                     </motion.h2>
 
                     <motion.p
@@ -67,7 +67,7 @@ export default function CTA() {
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <a
-                            href="#kenapa-sivana"
+                            href="#kenapa-amthal"
                             className="px-10 py-5 bg-transparent text-white rounded-full font-semibold text-lg border-2 border-white/50 hover:bg-white/10 transition-all"
                         >
                             Learn More

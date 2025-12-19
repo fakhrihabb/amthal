@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SIVANA - EV Intelligence System for Global EV Charger Location Analytics",
+  title: "Amthal - EV Intelligence System for Global EV Charger Location Analytics",
   description: "AI-powered planning platform for electric vehicle charging infrastructure globally",
   icons: {
     icon: '/branding/logo.svg',

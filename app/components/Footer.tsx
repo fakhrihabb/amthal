@@ -9,9 +9,9 @@ export default function Footer() {
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">S</span>
+                                <span className="text-white font-bold text-xl">A</span>
                             </div>
-                            <span className="text-xl font-bold">SIVANA</span>
+                            <span className="text-xl font-bold">Amthal</span>
                         </div>
                         <p className="text-white/70 text-sm">
                             EV Intelligence System for Global EV Charger Location Analytics
@@ -23,8 +23,8 @@ export default function Footer() {
                         <h3 className="font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2 text-sm text-white/70">
                             <li>
-                                <a href="#kenapa-sivana" className="hover:text-white transition-colors">
-                                    Why SIVANA?
+                                <a href="#kenapa-amthal" className="hover:text-white transition-colors">
+                                    Why Amthal?
                                 </a>
                             </li>
                             <li>
@@ -34,7 +34,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <a href="#hasil" className="hover:text-white transition-colors">
-                                    SIVANA Results
+                                    Amthal Results
                                 </a>
                             </li>
                             <li>
@@ -52,7 +52,7 @@ export default function Footer() {
                             Powered by Google Cloud Platform
                         </p>
                         <p className="text-sm text-white/70 mt-2">
-                            © 2025 SIVANA. All rights reserved.
+                            © 2025 Amthal. All rights reserved.
                         </p>
                     </div>
                 </div>

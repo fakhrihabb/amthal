@@ -54,7 +54,7 @@ export default function ScreenshotButton({ mapContainerRef }: ScreenshotButtonPr
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `sivana-map-${new Date().toISOString().slice(0, 10)}-${Date.now()}.png`;
+                link.download = `amthal-map-${new Date().toISOString().slice(0, 10)}-${Date.now()}.png`;
                 link.click();
                 URL.revokeObjectURL(url);
             }, 'image/png');
