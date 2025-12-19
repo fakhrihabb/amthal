@@ -1,7 +1,7 @@
 import { ProjectList } from "../../components/projects/ProjectList";
 
 export const metadata = {
-  title: "Daftar Proyek | SIVANA",
+  title: "Daftar Proyek | Amthal",
   description: "Kelola proyek perencanaan infrastruktur EV Anda.",
 };
 

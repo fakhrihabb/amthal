@@ -6,20 +6,20 @@ import { useState } from 'react';
 
 const faqs = [
     {
-        question: 'What is SIVANA?',
-        answer: 'SIVANA (EV Intelligence System for Global EV Charger Location Analytics) is a web-based planning platform that helps stakeholders identify, analyze, and propose optimal locations for EV charging infrastructure globally.',
+        question: 'What is Amthal?',
+        answer: 'Amthal (EV Intelligence System for Global EV Charger Location Analytics) is a web-based planning platform that helps stakeholders identify, analyze, and propose optimal locations for EV charging infrastructure globally.',
     },
     {
-        question: 'Who can use SIVANA?',
-        answer: 'SIVANA is designed for government infrastructure planners, private investors, developers, regional coordinators, and consultants involved in EV infrastructure planning.',
+        question: 'Who can use Amthal?',
+        answer: 'Amthal is designed for government infrastructure planners, private investors, developers, regional coordinators, and consultants involved in EV infrastructure planning.',
     },
     {
-        question: 'Is SIVANA free?',
-        answer: 'For this MVP hackathon version, SIVANA can be accessed openly without requiring registration or login. Projects are saved in your local browser.',
+        question: 'Is Amthal free?',
+        answer: 'For this MVP hackathon version, Amthal can be accessed openly without requiring registration or login. Projects are saved in your local browser.',
     },
     {
         question: 'What data is used for analysis?',
-        answer: 'SIVANA integrates data from Google Maps (POI, routes, distances), PLN grid data (capacity), BPS population data, and national EV charger registries to provide comprehensive analysis.',
+        answer: 'Amthal integrates data from Google Maps (POI, routes, distances), PLN grid data (capacity), BPS population data, and national EV charger registries to provide comprehensive analysis.',
     },
     {
         question: 'How long does it take to analyze one location?',

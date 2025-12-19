@@ -67,7 +67,7 @@ export default function CTA() {
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <a
-                            href="#kenapa-sivana"
+                            href="#kenapa-amthal"
                             className="px-10 py-5 bg-transparent text-white rounded-full font-semibold text-lg border-2 border-white/50 hover:bg-white/10 transition-all"
                         >
                             Learn More

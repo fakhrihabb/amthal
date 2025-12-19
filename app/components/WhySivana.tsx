@@ -28,7 +28,7 @@ const benefits = [
 
 export default function WhySivana() {
     return (
-        <section id="kenapa-sivana" className="section-padding bg-gray-50">
+        <section id="kenapa-amthal" className="section-padding bg-gray-50">
             <div className="container-custom">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
