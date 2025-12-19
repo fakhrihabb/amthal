@@ -4,21 +4,21 @@ import { motion } from 'framer-motion';
 import { X, Check, Clock, TrendingUp, FileText, Zap } from 'lucide-react';
 
 const beforeItems = [
-    { icon: Clock, text: 'Analisis manual memakan waktu berhari-hari' },
-    { icon: X, text: 'Data tersebar di berbagai sumber' },
-    { icon: X, text: 'Sulit membandingkan lokasi kandidat' },
-    { icon: X, text: 'Laporan dibuat manual dengan Excel' },
-    { icon: X, text: 'Tidak ada visualisasi 3D' },
-    { icon: X, text: 'Keputusan berdasarkan intuisi' },
+    { icon: Clock, text: 'Manual analysis takes days' },
+    { icon: X, text: 'Data scattered across various sources' },
+    { icon: X, text: 'Difficult to compare candidate locations' },
+    { icon: X, text: 'Reports created manually with Excel' },
+    { icon: X, text: 'No 3D visualization' },
+    { icon: X, text: 'Decisions based on intuition' },
 ];
 
 const afterItems = [
-    { icon: Zap, text: 'Analisis selesai dalam 15 menit' },
-    { icon: Check, text: 'Data terintegrasi dari Google Cloud' },
-    { icon: Check, text: 'Perbandingan lokasi side-by-side' },
-    { icon: Check, text: 'Laporan PDF otomatis & profesional' },
-    { icon: Check, text: 'Visualisasi 2D & 3D interaktif' },
-    { icon: Check, text: 'Rekomendasi berbasis AI & data' },
+    { icon: Zap, text: 'Analysis finished in 15 minutes' },
+    { icon: Check, text: 'Integrated data from Google Cloud' },
+    { icon: Check, text: 'Side-by-side location comparison' },
+    { icon: Check, text: 'Automated & professional PDF reports' },
+    { icon: Check, text: 'Interactive 2D & 3D visualization' },
+    { icon: Check, text: 'AI & data-driven recommendations' },
 ];
 
 export default function Results() {
@@ -33,10 +33,10 @@ export default function Results() {
                     className="text-center mb-16"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                        Hasil <span className="gradient-text">SIVANA</span>
+                        <span className="gradient-text">SIVANA</span> Results
                     </h2>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Transformasi dari perencanaan tradisional ke perencanaan berbasis AI
+                        Transformation from traditional planning to AI-driven planning
                     </p>
                 </motion.div>
 
@@ -54,8 +54,8 @@ export default function Results() {
                                 <X className="w-6 h-6 text-red-600" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-800">Sebelum SIVANA</h3>
-                                <p className="text-sm text-gray-600">Perencanaan Tradisional</p>
+                                <h3 className="text-2xl font-bold text-gray-800">Before SIVANA</h3>
+                                <p className="text-sm text-gray-600">Traditional Planning</p>
                             </div>
                         </div>
 
@@ -77,7 +77,7 @@ export default function Results() {
 
                         <div className="mt-6 p-4 bg-red-100 rounded-lg">
                             <p className="text-sm font-semibold text-red-800">
-                                ⏱️ Waktu rata-rata: 2-3 hari per lokasi
+                                ⏱️ Average time: 2-3 days per location
                             </p>
                         </div>
                     </motion.div>
@@ -98,8 +98,8 @@ export default function Results() {
                                 <Check className="w-6 h-6 text-green-600" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-800">Dengan SIVANA</h3>
-                                <p className="text-sm text-gray-600">Perencanaan Modern</p>
+                                <h3 className="text-2xl font-bold text-gray-800">With SIVANA</h3>
+                                <p className="text-sm text-gray-600">Modern Planning</p>
                             </div>
                         </div>
 
@@ -121,10 +121,10 @@ export default function Results() {
 
                         <div className="mt-6 p-4 bg-gradient-to-r from-green-100 to-green-50 rounded-lg relative z-10">
                             <p className="text-sm font-semibold text-green-800">
-                                ⚡ Waktu rata-rata: &lt; 15 menit per lokasi
+                                ⚡ Average time: &lt; 15 minutes per location
                             </p>
                             <p className="text-xs text-green-700 mt-1">
-                                Hemat 95% waktu perencanaan!
+                                Save 95% planning time!
                             </p>
                         </div>
                     </motion.div>

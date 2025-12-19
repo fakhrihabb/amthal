@@ -29,7 +29,7 @@ export default function CTA() {
                         className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white mb-6"
                     >
                         <Sparkles className="w-4 h-4" />
-                        <span className="text-sm font-medium">Mulai Gratis Sekarang</span>
+                        <span className="text-sm font-medium">Start Free Now</span>
                     </motion.div>
 
                     <motion.h2
@@ -39,7 +39,7 @@ export default function CTA() {
                         transition={{ delay: 0.3, duration: 0.6 }}
                         className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
                     >
-                        Siap Mencoba SIVANA?
+                        Ready to Try SIVANA?
                     </motion.h2>
 
                     <motion.p
@@ -49,7 +49,7 @@ export default function CTA() {
                         transition={{ delay: 0.4, duration: 0.6 }}
                         className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl mx-auto"
                     >
-                        Percepat perencanaan infrastruktur EV Anda dengan analisis berbasis AI dan visualisasi interaktif
+                        Accelerate your EV infrastructure planning with AI-powered analysis and interactive visualization
                     </motion.p>
 
                     <motion.div
@@ -63,14 +63,14 @@ export default function CTA() {
                             href="/intelligence-planner"
                             className="group px-10 py-5 bg-white text-[var(--color-blue)] rounded-full font-semibold text-lg flex items-center gap-2 hover:bg-white/90 transition-all hover:scale-105 shadow-2xl"
                         >
-                            Mulai Analisis Sekarang
+                            Start Analysis Now
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <a
                             href="#kenapa-sivana"
                             className="px-10 py-5 bg-transparent text-white rounded-full font-semibold text-lg border-2 border-white/50 hover:bg-white/10 transition-all"
                         >
-                            Pelajari Lebih Lanjut
+                            Learn More
                         </a>
                     </motion.div>
 
@@ -86,13 +86,13 @@ export default function CTA() {
                             <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                                 &lt; 15
                             </div>
-                            <div className="text-sm text-white/80">Menit per Analisis</div>
+                            <div className="text-sm text-white/80">Minutes per Analysis</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                                 100%
                             </div>
-                            <div className="text-sm text-white/80">Berbasis Data</div>
+                            <div className="text-sm text-white/80">Data Driven</div>
                         </div>
                         <div className="text-center">
                             <div className="text-3xl md:text-4xl font-bold text-white mb-2">

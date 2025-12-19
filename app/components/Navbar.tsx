@@ -64,7 +64,7 @@ export default function Navbar() {
                 }`}
             >
               <FolderKanban className="w-4 h-4" />
-              <span className="font-medium">Proyek</span>
+              <span className="font-medium">Projects</span>
             </Link>
           </div>
         </div>
