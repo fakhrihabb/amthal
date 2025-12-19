@@ -23,7 +23,7 @@ export default function Footer() {
                         <h3 className="font-semibold mb-4">Quick Links</h3>
                         <ul className="space-y-2 text-sm text-white/70">
                             <li>
-                                <a href="#kenapa-sivana" className="hover:text-white transition-colors">
+                                <a href="#kenapa-amthal" className="hover:text-white transition-colors">
                                     Why Amthal?
                                 </a>
                             </li>

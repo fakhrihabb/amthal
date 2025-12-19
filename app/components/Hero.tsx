@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function Hero() {
     const scrollToNext = () => {
-        document.getElementById('kenapa-sivana')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('kenapa-amthal')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
