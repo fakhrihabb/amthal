@@ -41,11 +41,11 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
       if (data) {
         setProject(data);
       } else {
-        setError("Proyek tidak ditemukan.");
+        setError("Project not found.");
       }
     } catch (err) {
       console.error(err);
-      setError("Gagal memuat proyek.");
+      setError("Failed to load project.");
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +56,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
       await SupabaseService.deleteProject(id);
       router.push("/projects");
     } catch (err) {
-      alert("Gagal menghapus proyek.");
+      alert("Failed to delete project.");
     }
   };
 
@@ -65,7 +65,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
       await SupabaseService.updateProject(id, updates);
       fetchProject(); // Refresh to show updated data
     } catch (err) {
-      alert("Gagal mengupdate proyek.");
+      alert("Failed to update project.");
     }
   };
 
@@ -77,7 +77,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
       await SupabaseService.addLocation(id, locationData);
       fetchProject(); // Refresh
     } catch (err) {
-      alert("Gagal menambah lokasi.");
+      alert("Failed to add location.");
     }
   };
 
@@ -93,7 +93,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         });
       }
     } catch (err) {
-      alert("Gagal menghapus lokasi");
+      alert("Failed to remove location");
       fetchProject(); // Revert on fail
     }
   };
@@ -111,7 +111,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
         });
       }
     } catch (err) {
-      alert("Gagal memperbarui lokasi.");
+      alert("Failed to update location.");
       fetchProject();
     }
   };
@@ -127,9 +127,9 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
   if (error || !project) {
     return (
       <div className="flex h-screen flex-col items-center justify-center bg-slate-50 gap-4">
-        <p className="text-red-500 font-semibold">{error || "Proyek tidak ditemukan"}</p>
+        <p className="text-red-500 font-semibold">{error || "Project not found"}</p>
         <button onClick={() => router.push("/projects")} className="text-brand-primary hover:underline">
-          Kembali ke Daftar
+          Back to List
         </button>
       </div>
     );
@@ -157,19 +157,19 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
             onClick={() => setActiveTab('list')}
             className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'list' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
-            Daftar Detail
+            Details List
           </button>
           <button
             onClick={() => setActiveTab('comparison')}
             className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'comparison' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
-            Perbandingan & Analisis
+            Comparison & Analysis
           </button>
           <button
             onClick={() => setActiveTab('history')}
             className={`px-4 py-2 rounded-lg font-semibold transition-all ${activeTab === 'history' ? 'bg-brand-primary text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
-            Riwayat Aktivitas
+            Activity History
           </button>
         </div>
 
@@ -206,7 +206,7 @@ export default function ProjectDetailsPage({ params }: { params: Promise<{ id: s
             <ComparisonCharts locations={project.locations} />
 
             <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Tabel Perbandingan Detail</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Detailed Comparison Table</h3>
               <ComparisonTable
                 locations={project.locations}
                 onUpdateLocation={handleUpdateLocation}

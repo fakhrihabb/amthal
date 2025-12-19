@@ -1,5 +1,5 @@
 /**
- * SIVANA Design System
+ * AMTHAL Design System
  * Developer 2: Analysis Engine & AI Lead
  * 
  * Modern design with glassmorphism, gradients, and white-centric aesthetic
@@ -9,7 +9,7 @@
 // Brand Colors (Client Specified)
 // ============================================================================
 
-export const SIVANA_COLORS = {
+export const AMTHAL_COLORS = {
   darkBlue: '#0D263F',
   blue: '#134474',
   lightBlue: '#276FB0',
@@ -29,20 +29,20 @@ export const EXTENDED_PALETTE = {
   darkGray: '#4A5568',
 
   // Blues (Brand)
-  primaryBlue: SIVANA_COLORS.lightBlue,
-  accentBlue: SIVANA_COLORS.blue,
-  deepBlue: SIVANA_COLORS.darkBlue,
+  primaryBlue: AMTHAL_COLORS.lightBlue,
+  accentBlue: AMTHAL_COLORS.blue,
+  deepBlue: AMTHAL_COLORS.darkBlue,
 
   // Gradients Colors
   gradientStart: '#E0F2FF', // Light blue tint
   gradientMid: '#BFDBFE',   // Medium blue tint
-  gradientEnd: SIVANA_COLORS.lightBlue,
+  gradientEnd: AMTHAL_COLORS.lightBlue,
 
   // Semantic Colors
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  info: SIVANA_COLORS.lightBlue,
+  info: AMTHAL_COLORS.lightBlue,
 } as const;
 
 // ============================================================================
@@ -92,7 +92,7 @@ export const GRADIENTS = {
   primary: `linear-gradient(135deg, ${EXTENDED_PALETTE.white} 0%, ${EXTENDED_PALETTE.gradientStart} 50%, ${EXTENDED_PALETTE.gradientMid} 100%)`,
 
   // Accent gradient (blue tones)
-  accent: `linear-gradient(135deg, ${SIVANA_COLORS.lightBlue} 0%, ${SIVANA_COLORS.blue} 100%)`,
+  accent: `linear-gradient(135deg, ${AMTHAL_COLORS.lightBlue} 0%, ${AMTHAL_COLORS.blue} 100%)`,
 
   // Subtle background gradient
   background: `linear-gradient(180deg, ${EXTENDED_PALETTE.white} 0%, ${EXTENDED_PALETTE.offWhite} 100%)`,
@@ -104,7 +104,7 @@ export const GRADIENTS = {
   mesh: `
     radial-gradient(at 0% 0%, ${EXTENDED_PALETTE.gradientStart} 0px, transparent 50%),
     radial-gradient(at 100% 0%, ${EXTENDED_PALETTE.gradientMid} 0px, transparent 50%),
-    radial-gradient(at 100% 100%, ${SIVANA_COLORS.lightBlue}20 0px, transparent 50%),
+    radial-gradient(at 100% 100%, ${AMTHAL_COLORS.lightBlue}20 0px, transparent 50%),
     radial-gradient(at 0% 100%, ${EXTENDED_PALETTE.white} 0px, transparent 50%)
   `,
 } as const;
@@ -132,9 +132,9 @@ export const SHADOWS = {
 
 export const cssVariables = {
   // Brand colors
-  '--color-dark-blue': SIVANA_COLORS.darkBlue,
-  '--color-blue': SIVANA_COLORS.blue,
-  '--color-light-blue': SIVANA_COLORS.lightBlue,
+  '--color-dark-blue': AMTHAL_COLORS.darkBlue,
+  '--color-blue': AMTHAL_COLORS.blue,
+  '--color-light-blue': AMTHAL_COLORS.lightBlue,
 
   // Extended palette
   '--color-white': EXTENDED_PALETTE.white,
@@ -158,14 +158,14 @@ export const cssVariables = {
 // Utility Functions
 // ============================================================================
 
-export type SivanaColor = keyof typeof SIVANA_COLORS;
+export type AmthalColor = keyof typeof AMTHAL_COLORS;
 export type ExtendedColor = keyof typeof EXTENDED_PALETTE;
 
 /**
  * Convert hex to RGB
  */
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);
   return result
     ? {
       r: parseInt(result[1], 16),
@@ -178,11 +178,11 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
 /**
  * Get color with alpha transparency
  */
-export function getColorWithAlpha(color: SivanaColor | ExtendedColor, alpha: number): string {
+export function getColorWithAlpha(color: AmthalColor | ExtendedColor, alpha: number): string {
   let hex: string;
 
-  if (color in SIVANA_COLORS) {
-    hex = SIVANA_COLORS[color as SivanaColor];
+  if (color in AMTHAL_COLORS) {
+    hex = AMTHAL_COLORS[color as AmthalColor];
   } else if (color in EXTENDED_PALETTE) {
     hex = EXTENDED_PALETTE[color as ExtendedColor];
   } else {
@@ -213,10 +213,10 @@ export function getGradient(variant: keyof typeof GRADIENTS = 'primary') {
 // ============================================================================
 
 export const tailwindColors = {
-  sivana: {
-    'dark-blue': SIVANA_COLORS.darkBlue,
-    'blue': SIVANA_COLORS.blue,
-    'light-blue': SIVANA_COLORS.lightBlue,
+  amthal: {
+    'dark-blue': AMTHAL_COLORS.darkBlue,
+    'blue': AMTHAL_COLORS.blue,
+    'light-blue': AMTHAL_COLORS.lightBlue,
   },
   white: EXTENDED_PALETTE.white,
   'off-white': EXTENDED_PALETTE.offWhite,

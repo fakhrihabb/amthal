@@ -226,7 +226,7 @@ export const SupabaseService = {
     };
 
     // Log Activity
-    await ProjectHistoryService.logAction(projectId, 'ADD_LOCATION', `Menambahkan lokasi "${dbLocationData.name || 'Lokasi Baru'}"`);
+    await ProjectHistoryService.logAction(projectId, 'ADD_LOCATION', `Added location "${dbLocationData.name || 'New Location'}"`);
 
     return result;
   },
@@ -251,7 +251,7 @@ export const SupabaseService = {
 
     // Log Activity if we found the location
     if (locationData) {
-      await ProjectHistoryService.logAction(locationData.project_id, 'REMOVE_LOCATION', `Menghapus lokasi "${locationData.name}"`);
+      await ProjectHistoryService.logAction(locationData.project_id, 'REMOVE_LOCATION', `Removed location "${locationData.name}"`);
     }
   },
 
@@ -309,7 +309,7 @@ export const ProjectReportsService = {
     }
 
     // Log Activity
-    await ProjectHistoryService.logAction(projectId, 'GENERATE_REPORT', `Membuat laporan "${fileName}"`);
+    await ProjectHistoryService.logAction(projectId, 'GENERATE_REPORT', `Generated report "${fileName}"`);
   },
 
   getReports: async (projectId: string): Promise<any[]> => {

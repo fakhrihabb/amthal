@@ -22,9 +22,9 @@ export const HistoryTimeline = ({ projectId }: HistoryTimelineProps) => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-        const res = await fetch(`/api/projects/${projectId}/history`);
-        const data = await res.json();
-        setHistory(Array.isArray(data) ? data : []);
+      const res = await fetch(`/api/projects/${projectId}/history`);
+      const data = await res.json();
+      setHistory(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Failed to fetch data", err);
     } finally {
@@ -44,27 +44,27 @@ export const HistoryTimeline = ({ projectId }: HistoryTimelineProps) => {
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden h-full flex flex-col">
       {/* Header */}
       <div className="flex border-b border-gray-100 bg-gray-50/50 px-6 py-4">
-          <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-            <History className="w-4 h-4 text-brand-primary" /> 
-            Riwayat Aktivitas Proyek
-          </h3>
+        <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+          <History className="w-4 h-4 text-brand-primary" />
+          Project Activity History
+        </h3>
       </div>
 
       <div className="flex-1 overflow-y-auto p-0 scrollbar-thin scrollbar-thumb-gray-200">
         {isLoading ? (
-           <div className="flex items-center justify-center h-40">
-             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#134474]"></div>
-           </div>
+          <div className="flex items-center justify-center h-40">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#134474]"></div>
+          </div>
         ) : (
           <div className="p-6 space-y-6">
             {history.length === 0 ? (
-              <p className="text-center text-gray-400 text-sm py-8">Belum ada riwayat aktivitas.</p>
+              <p className="text-center text-gray-400 text-sm py-8">No activity history yet.</p>
             ) : (
               <div className="relative border-l-2 border-gray-100 ml-3 space-y-8">
                 {history.map((item) => (
                   <div key={item.id} className="relative pl-8">
                     <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center">
-                       {/* Dot */}
+                      {/* Dot */}
                     </div>
                     <div>
                       <span className="text-xs font-medium text-gray-400 flex items-center gap-1 mb-1">

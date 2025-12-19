@@ -12,11 +12,11 @@ export interface SolarPanelConfig {
 }
 
 export interface ROIAnalysis {
-    installation_cost_idr: number;
-    annual_savings_idr: number;
+    installation_cost_usd: number;
+    annual_savings_usd: number;
     payback_period_years: number;
     roi_25_years_percent: number;
-    net_profit_25_years_idr: number;
+    net_profit_25_years_usd: number;
 }
 
 export interface SolarROIResult {
@@ -59,26 +59,26 @@ export function calculateSolarROI(
     };
 
     // ROI Calculation
-    const installation_cost_idr = panel_area_m2 * SOLAR_CONFIG.INSTALLATION_COST_PER_M2_IDR;
-    const annual_savings_idr = annual_production_kwh * SOLAR_CONFIG.ELECTRICITY_RATE_IDR_KWH;
+    const installation_cost_usd = panel_area_m2 * SOLAR_CONFIG.INSTALLATION_COST_PER_M2_USD;
+    const annual_savings_usd = annual_production_kwh * SOLAR_CONFIG.ELECTRICITY_RATE_USD_KWH;
 
     // Simple payback period (without degradation)
-    const payback_period_years = installation_cost_idr / annual_savings_idr;
+    const payback_period_years = installation_cost_usd / annual_savings_usd;
 
     // 25-year ROI calculation (with degradation)
-    const net_profit_25_years_idr = calculate25YearProfit(
+    const net_profit_25_years_usd = calculate25YearProfit(
         annual_production_kwh,
-        installation_cost_idr
+        installation_cost_usd
     );
 
-    const roi_25_years_percent = (net_profit_25_years_idr / installation_cost_idr) * 100;
+    const roi_25_years_percent = (net_profit_25_years_usd / installation_cost_usd) * 100;
 
     const roi_analysis: ROIAnalysis = {
-        installation_cost_idr,
-        annual_savings_idr,
+        installation_cost_usd,
+        annual_savings_usd,
         payback_period_years,
         roi_25_years_percent,
-        net_profit_25_years_idr,
+        net_profit_25_years_usd,
     };
 
     // Generate recommendation
@@ -101,15 +101,15 @@ export function calculateSolarROI(
  */
 function calculate25YearProfit(
     annual_production_kwh: number,
-    installation_cost_idr: number
+    installation_cost_usd: number
 ): number {
-    let cumulativeProfit = -installation_cost_idr;  // Start with negative (investment)
+    let cumulativeProfit = -installation_cost_usd;  // Start with negative (investment)
 
     for (let year = 1; year <= 25; year++) {
         // Apply degradation (0.5% per year)
         const degradationFactor = Math.pow(1 - SOLAR_CONFIG.PANEL_DEGRADATION, year - 1);
         const yearProduction = annual_production_kwh * degradationFactor;
-        const yearSavings = yearProduction * SOLAR_CONFIG.ELECTRICITY_RATE_IDR_KWH;
+        const yearSavings = yearProduction * SOLAR_CONFIG.ELECTRICITY_RATE_USD_KWH;
 
         cumulativeProfit += yearSavings;
     }

@@ -43,7 +43,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         {/* Total Locations */}
         <div className="flex items-center gap-1.5">
           <MapPin className="w-4 h-4 text-brand-primary" />
-          <span className="text-xs text-gray-500">Lokasi:</span>
+          <span className="text-xs text-gray-500">Locations:</span>
           <span className="text-sm font-semibold text-brand-dark">
             {project.location_count}
           </span>

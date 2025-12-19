@@ -1,8 +1,8 @@
 import { ProjectList } from "../../components/projects/ProjectList";
 
 export const metadata = {
-  title: "Daftar Proyek | SIVANA",
-  description: "Kelola proyek perencanaan infrastruktur EV Anda.",
+  title: "Projects | AMTHAL",
+  description: "Manage your EV infrastructure planning projects.",
 };
 
 export default function ProjectsPage() {
@@ -15,9 +15,9 @@ export default function ProjectsPage() {
       {/* Page Header with Glass Effect */}
       <div className="relative sticky top-0 z-10 glass-panel border-b-0">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold text-brand-dark tracking-tight">Daftar Proyek</h1>
+          <h1 className="text-3xl font-bold text-brand-dark tracking-tight">Projects</h1>
           <p className="text-brand-primary/80 mt-2 text-lg">
-            Kelola dan pantau semua proyek perencanaan Anda di satu tempat.
+            Manage and monitor all your planning projects in one place.
           </p>
         </div>
       </div>

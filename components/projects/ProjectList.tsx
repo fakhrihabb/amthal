@@ -143,7 +143,7 @@ export const ProjectList = () => {
         <div className="relative w-full md:w-96 group">
           <input
             type="text"
-            placeholder="Cari proyek..."
+            placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 bg-white/80 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-light/50 focus:border-brand-light outline-none transition-all text-brand-dark shadow-sm"
@@ -159,8 +159,8 @@ export const ProjectList = () => {
               onChange={(e) => setSortField(e.target.value as "created_at" | "name")}
               className="px-3 py-1.5 bg-transparent border-none outline-none cursor-pointer text-brand-dark font-medium text-sm focus:ring-0"
             >
-              <option value="created_at">Waktu Dibuat</option>
-              <option value="name">Abjad (A-Z)</option>
+              <option value="created_at">Date Created</option>
+              <option value="name">Alphabetical (A-Z)</option>
             </select>
 
             <div className="w-px h-4 bg-gray-300 mx-1"></div>
@@ -168,7 +168,7 @@ export const ProjectList = () => {
             <button
               onClick={() => setSortOrder(prev => prev === "asc" ? "desc" : "asc")}
               className="p-1.5 hover:bg-gray-100 rounded-md transition-colors text-brand-primary"
-              title={sortOrder === "asc" ? "Urutan: Menaik (A-Z / Terlama)" : "Urutan: Menurun (Z-A / Terbaru)"}
+              title={sortOrder === "asc" ? "Sort: Ascending (A-Z / Oldest)" : "Sort: Descending (Z-A / Newest)"}
             >
               {sortOrder === "asc" ? (
                 // Ascending: Arrow Up (Low to High)
@@ -185,7 +185,7 @@ export const ProjectList = () => {
             className="flex items-center gap-2 px-5 py-2.5 btn-primary rounded-lg font-semibold shadow-md active:scale-95 whitespace-nowrap ml-2"
           >
             <Plus className="w-5 h-5" />
-            Buat Proyek
+            Create Project
           </button>
         </div>
       </div>
@@ -209,7 +209,7 @@ export const ProjectList = () => {
                 disabled={currentPage === 1}
                 className="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm"
               >
-                ← Sebelumnya
+                ← Previous
               </button>
 
               <div className="flex items-center gap-1">
@@ -232,8 +232,8 @@ export const ProjectList = () => {
                       key={page}
                       onClick={() => setCurrentPage(page)}
                       className={`min-w-[40px] h-10 rounded-lg font-medium text-sm transition-colors ${currentPage === page
-                          ? 'bg-brand-primary text-white shadow-md'
-                          : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
+                        ? 'bg-brand-primary text-white shadow-md'
+                        : 'bg-white border border-gray-200 hover:bg-gray-50 text-gray-700'
                         }`}
                     >
                       {page}
@@ -247,14 +247,14 @@ export const ProjectList = () => {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-sm"
               >
-                Selanjutnya →
+                Next →
               </button>
             </div>
           )}
 
           {/* Results Info */}
           <p className="text-center text-sm text-gray-500 mt-4">
-            Menampilkan {startIndex + 1}-{Math.min(endIndex, filteredProjects.length)} dari {filteredProjects.length} proyek
+            Showing {startIndex + 1}-{Math.min(endIndex, filteredProjects.length)} of {filteredProjects.length} projects
           </p>
         </>
       ) : (
@@ -262,18 +262,18 @@ export const ProjectList = () => {
           <div className="mx-auto w-20 h-20 bg-brand-light/5 rounded-full flex items-center justify-center mb-6 ring-8 ring-brand-light/5">
             <Search className="w-10 h-10 text-brand-primary/50" />
           </div>
-          <h3 className="text-xl font-bold text-brand-dark mb-2">Belum ada proyek</h3>
+          <h3 className="text-xl font-bold text-brand-dark mb-2">No projects yet</h3>
           <p className="text-gray-500 mb-8 max-w-md mx-auto text-lg leading-relaxed">
             {searchQuery
-              ? `Tidak ditemukan proyek dengan kata kunci "${searchQuery}"`
-              : "Mulai dengan membuat proyek pertama Anda untuk merencanakan lokasi SPKLU/SPBKLU."}
+              ? `No projects found matching "${searchQuery}"`
+              : "Get started by creating your first project to plan SPKLU/SPBKLU locations."}
           </p>
           {!searchQuery && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="text-brand-primary font-semibold hover:text-brand-light hover:underline inline-flex items-center gap-1 transition-all"
             >
-              Buat Proyek Baru <span className="text-xl">&rarr;</span>
+              Create New Project <span className="text-xl">&rarr;</span>
             </button>
           )}
         </div>

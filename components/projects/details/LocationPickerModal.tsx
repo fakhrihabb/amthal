@@ -20,12 +20,12 @@ const defaultCenter = {
 const libraries: ("places" | "geometry" | "drawing" | "visualization")[] = ["places"];
 
 // Extracted Map Component to control API loading
-const ActiveMap = ({ 
-  onMapClick, 
-  onLoad, 
-  onUnmount, 
-  selectedPos 
-}: { 
+const ActiveMap = ({
+  onMapClick,
+  onLoad,
+  onUnmount,
+  selectedPos
+}: {
   onMapClick: (e: google.maps.MapMouseEvent) => void;
   onLoad: (map: google.maps.Map) => void;
   onUnmount: (map: google.maps.Map) => void;
@@ -33,7 +33,7 @@ const ActiveMap = ({
 }) => {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "", 
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
     libraries,
   });
 
@@ -41,7 +41,7 @@ const ActiveMap = ({
     return (
       <div className="h-[400px] flex flex-col items-center justify-center text-gray-400 gap-2">
         <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
-        <span>Memuat Peta Google Maps...</span>
+        <span>Loading Google Maps...</span>
       </div>
     );
   }
@@ -55,13 +55,13 @@ const ActiveMap = ({
       onUnmount={onUnmount}
       onClick={onMapClick}
       options={{
-          disableDefaultUI: false,
-          streetViewControl: false,
-          mapTypeControl: false
+        disableDefaultUI: false,
+        streetViewControl: false,
+        mapTypeControl: false
       }}
     >
       {selectedPos && (
-          <Marker position={selectedPos} animation={google.maps.Animation.DROP} />
+        <Marker position={selectedPos} animation={google.maps.Animation.DROP} />
       )}
     </GoogleMap>
   );
@@ -78,7 +78,7 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
   const [address, setAddress] = useState("");
   const [selectedPos, setSelectedPos] = useState<google.maps.LatLngLiteral | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  
+
   // Dev Mode Optimization
   const isDev = process.env.NODE_ENV === "development";
   const [enableMaps, setEnableMaps] = useState(!isDev);
@@ -86,11 +86,11 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
   // Reset state on open
   useEffect(() => {
     if (isOpen) {
-        // If in dev mode, always start with maps disabled to be safe/efficient
-        if (isDev) setEnableMaps(false);
-        setName("");
-        setAddress("");
-        setSelectedPos(null);
+      // If in dev mode, always start with maps disabled to be safe/efficient
+      if (isDev) setEnableMaps(false);
+      setName("");
+      setAddress("");
+      setSelectedPos(null);
     }
   }, [isOpen, isDev]);
 
@@ -99,7 +99,7 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
       const lat = e.latLng.lat();
       const lng = e.latLng.lng();
       setSelectedPos({ lat, lng });
-      
+
       setAddress(`Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
     }
   }, []);
@@ -114,7 +114,7 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
 
   const handleConfirm = () => {
     if (!name || !selectedPos) {
-      alert("Mohon isi nama lokasi dan pilih titik di peta.");
+      alert("Please fill in location name and select a point on the map.");
       return;
     }
 
@@ -123,9 +123,9 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
       address,
       latitude: selectedPos.lat,
       longitude: selectedPos.lng,
-      suitability_score: undefined 
+      suitability_score: undefined
     });
-    
+
     // Reset fields
     setName("");
     setAddress("");
@@ -140,26 +140,26 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
         {/* Header */}
         <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white z-10">
           <div className="flex items-center gap-3">
-             <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-brand-primary" />
-                Pilih Lokasi Manual
-             </h2>
-             
-             {isDev && (
-               <button 
-                 onClick={() => setEnableMaps(!enableMaps)}
-                 className={`
+            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-brand-primary" />
+              Manually Select Location
+            </h2>
+
+            {isDev && (
+              <button
+                onClick={() => setEnableMaps(!enableMaps)}
+                className={`
                     px-2 py-1 text-xs font-semibold rounded border transition-colors flex items-center gap-1
-                    ${enableMaps 
-                        ? "bg-red-50 text-red-600 border-red-200 hover:bg-red-100" 
-                        : "bg-green-50 text-green-600 border-green-200 hover:bg-green-100"}
+                    ${enableMaps
+                    ? "bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                    : "bg-green-50 text-green-600 border-green-200 hover:bg-green-100"}
                  `}
-                 title="Toggle Google Maps API loading to save quotas"
-               >
-                 <Globe className="w-3 h-3" />
-                 {enableMaps ? "Disable Dev Maps" : "Enable Dev Maps"}
-               </button>
-             )}
+                title="Toggle Google Maps API loading to save quotas"
+              >
+                <Globe className="w-3 h-3" />
+                {enableMaps ? "Disable Dev Maps" : "Enable Dev Maps"}
+              </button>
+            )}
           </div>
 
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
@@ -172,38 +172,38 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
 
           {/* Info Alert */}
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
-             <div className="p-1.5 bg-blue-100 rounded-full shrink-0">
-               <Info className="w-4 h-4 text-blue-700" />
-             </div>
-             <div>
-               <p className="text-sm text-blue-800 font-medium">Tips: Gunakan Intelligence Planner</p>
-               <p className="text-sm text-blue-600 mt-1 leading-relaxed">
-                 Fitur ini hanya untuk penyimpanan manual tanpa analisis. Untuk hasil terbaik dengan skor dan rekomendasi AI, gunakan <a href="/intelligence-planner" className="underline font-semibold hover:text-blue-900">Intelligence Planner</a>.
-               </p>
-             </div>
+            <div className="p-1.5 bg-blue-100 rounded-full shrink-0">
+              <Info className="w-4 h-4 text-blue-700" />
+            </div>
+            <div>
+              <p className="text-sm text-blue-800 font-medium">Tips: Use Intelligence Planner</p>
+              <p className="text-sm text-blue-600 mt-1 leading-relaxed">
+                This feature is only for manual storage without analysis. For best results with scores and AI recommendations, use the <a href="/intelligence-planner" className="underline font-semibold hover:text-blue-900">Intelligence Planner</a>.
+              </p>
+            </div>
           </div>
-          
+
           {/* Form Fields */}
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-brand-dark mb-1">Nama Lokasi</label>
+              <label className="block text-sm font-medium text-brand-dark mb-1">Location Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Contoh: SPKLU Rest Area KM 57"
+                placeholder="Example: Public Charging Station Rest Area KM 57"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all outline-none"
                 autoFocus
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-brand-dark mb-1">Alamat / Koordinat</label>
+              <label className="block text-sm font-medium text-brand-dark mb-1">Address / Coordinates</label>
               <input
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="Klik pada peta untuk mengisi otomatis"
+                placeholder="Click on the map to auto-fill"
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all outline-none"
               />
             </div>
@@ -212,45 +212,45 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
           {/* Map Area */}
           <div className="relative rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-slate-100 min-h-[400px]">
             {enableMaps ? (
-                <ActiveMap 
-                    onMapClick={onMapClick}
-                    onLoad={onLoad}
-                    onUnmount={onUnmount}
-                    selectedPos={selectedPos}
-                />
+              <ActiveMap
+                onMapClick={onMapClick}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                selectedPos={selectedPos}
+              />
             ) : (
-                <div className="h-[400px] flex flex-col items-center justify-center text-gray-400 gap-3 bg-slate-50">
-                   <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                      <MapPin className="w-8 h-8 text-gray-300" />
-                   </div>
-                   <div className="text-center px-6">
-                       <p className="text-gray-600 font-medium">Maps API Disabled in Development</p>
-                       <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto">
-                         To save Google Cloud quotas, the map is hidden by default. 
-                         Click the "Enable Dev Maps" button in the header to load the map.
-                       </p>
-                   </div>
-                   {/* Fallback for manual coordinate entry if needed (Optional) */}
-                   <div className="flex gap-2 mt-4">
-                     <button 
-                       onClick={() => {
-                          const mockLat = defaultCenter.lat;
-                          const mockLng = defaultCenter.lng;
-                          setSelectedPos({ lat: mockLat, lng: mockLng });
-                          setAddress(`Lat: ${mockLat}, Lng: ${mockLng} (Mock)`);
-                       }}
-                       className="text-xs bg-white border border-gray-200 px-3 py-1.5 rounded hover:bg-gray-50 transition-colors"
-                     >
-                        Set Default Location (Mock)
-                     </button>
-                   </div>
+              <div className="h-[400px] flex flex-col items-center justify-center text-gray-400 gap-3 bg-slate-50">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                  <MapPin className="w-8 h-8 text-gray-300" />
                 </div>
+                <div className="text-center px-6">
+                  <p className="text-gray-600 font-medium">Maps API Disabled in Development</p>
+                  <p className="text-xs text-gray-400 mt-1 max-w-sm mx-auto">
+                    To save Google Cloud quotas, the map is hidden by default.
+                    Click the "Enable Dev Maps" button in the header to load the map.
+                  </p>
+                </div>
+                {/* Fallback for manual coordinate entry if needed (Optional) */}
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={() => {
+                      const mockLat = defaultCenter.lat;
+                      const mockLng = defaultCenter.lng;
+                      setSelectedPos({ lat: mockLat, lng: mockLng });
+                      setAddress(`Lat: ${mockLat}, Lng: ${mockLng} (Mock)`);
+                    }}
+                    className="text-xs bg-white border border-gray-200 px-3 py-1.5 rounded hover:bg-gray-50 transition-colors"
+                  >
+                    Set Default Location (Mock)
+                  </button>
+                </div>
+              </div>
             )}
-            
+
             {!selectedPos && enableMaps && (
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg text-sm font-medium text-gray-600 border border-gray-200 pointer-events-none z-10">
-                    Klik di peta untuk menandai lokasi
-                </div>
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow-lg text-sm font-medium text-gray-600 border border-gray-200 pointer-events-none z-10">
+                Click on the map to mark location
+              </div>
             )}
           </div>
 
@@ -262,20 +262,20 @@ export const LocationPickerModal = ({ isOpen, onClose, onConfirm }: LocationPick
             onClick={onClose}
             className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors"
           >
-            Batal
+            Cancel
           </button>
           <button
             onClick={handleConfirm}
             disabled={!name || !selectedPos}
             className={`
                 px-6 py-2 rounded-lg font-semibold text-white shadow-md transition-all flex items-center gap-2
-                ${(!name || !selectedPos) 
-                    ? "bg-gray-300 cursor-not-allowed" 
-                    : "bg-brand-primary hover:bg-brand-primary/90 active:scale-95"}
+                ${(!name || !selectedPos)
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-brand-primary hover:bg-brand-primary/90 active:scale-95"}
             `}
           >
             <MapPin className="w-4 h-4" />
-            Simpan Lokasi
+            Save Location
           </button>
         </div>
       </div>

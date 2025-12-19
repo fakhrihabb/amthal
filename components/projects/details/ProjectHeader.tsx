@@ -44,7 +44,7 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
         className="inline-flex items-center text-brand-primary hover:text-brand-dark mb-6 transition-colors font-medium group"
       >
         <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-        Kembali ke Daftar Proyek
+        Back to Projects
       </Link>
 
       <div className="glass-panel p-6 rounded-2xl border border-brand-primary/10 relative overflow-hidden">
@@ -68,7 +68,7 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
               <div className="flex items-start gap-2 text-gray-500 bg-white/50 p-3 rounded-lg border border-gray-100 inline-block">
                 <Target className="w-5 h-5 mt-0.5 text-brand-primary" />
                 <div>
-                  <span className="font-semibold text-brand-dark text-sm block">Tujuan / Goal:</span>
+                  <span className="font-semibold text-brand-dark text-sm block">Objective / Goal:</span>
                   <span className="text-sm">{project.objective}</span>
                 </div>
               </div>
@@ -77,7 +77,7 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
             <div className="flex items-center gap-4 text-sm text-gray-400 pt-2">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
-                Dibuat: {new Date(project.created_at).toLocaleDateString('id-ID', { dateStyle: 'long' })}
+                Created: {new Date(project.created_at).toLocaleDateString('en-US', { dateStyle: 'long' })}
               </div>
             </div>
           </div>
@@ -97,10 +97,10 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
               disabled={isDeleting}
               className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 border border-red-100 rounded-lg hover:bg-red-100 transition-colors shadow-sm disabled:opacity-50"
             >
-              {isDeleting ? 'Menghapus...' : (
+              {isDeleting ? 'Deleting...' : (
                 <>
                   <Trash2 className="w-4 h-4" />
-                  Hapus Proyek
+                  Delete Project
                 </>
               )}
             </button>
@@ -112,9 +112,9 @@ export const ProjectHeader = ({ project, onDelete, onUpdate }: ProjectHeaderProp
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Hapus Proyek?"
-        message="Apakah Anda yakin ingin menghapus proyek ini? Semua data lokasi dan analisis terkait akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan."
-        confirmText="Hapus Proyek"
+        title="Delete Project?"
+        message="Are you sure you want to delete this project? All location data and related analyses will be permanently deleted. This action cannot be undone."
+        confirmText="Delete Project"
         isDanger={true}
       />
 

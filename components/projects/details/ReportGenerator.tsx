@@ -72,11 +72,11 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
       if (url) {
         window.open(url, '_blank');
       } else {
-        alert("Gagal membuat link download. Silakan coba lagi.");
+        alert("Failed to create download link. Please try again.");
       }
     } catch (e) {
       console.error("Download error:", e);
-      alert("Terjadi kesalahan saat mengunduh laporan.");
+      alert("An error occurred while downloading the report.");
     }
   };
 
@@ -116,7 +116,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
           doc.text(project.name.toUpperCase(), MARGIN.left, 9);
           doc.setFont("helvetica", "normal");
           doc.setFontSize(8);
-          doc.text("Laporan Analisis Lokasi", pageWidth - MARGIN.right, 9, { align: "right" });
+          doc.text("Location Analysis Report", pageWidth - MARGIN.right, 9, { align: "right" });
         }
 
         // Footer line
@@ -127,7 +127,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         // Footer text
         doc.setFontSize(8);
         doc.setTextColor(...BRAND.gray500);
-        doc.text(`SIVANA Platform`, MARGIN.left, pageHeight - 6);
+        doc.text(`AMTHAL Platform`, MARGIN.left, pageHeight - 6);
         doc.text(`Halaman ${pageNum} dari ${totalPages}`, pageWidth / 2, pageHeight - 6, { align: "center" });
         doc.text(dateStr, pageWidth - MARGIN.right, pageHeight - 6, { align: "right" });
       };
@@ -150,8 +150,8 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
       doc.setFontSize(28);
       doc.setTextColor(...BRAND.white);
       doc.setFont("helvetica", "bold");
-      doc.text("LAPORAN ANALISIS", pageWidth / 2, pageHeight * 0.45, { align: "center" });
-      doc.text("LOKASI SPKLU/SPBKLU", pageWidth / 2, pageHeight * 0.45 + 12, { align: "center" });
+      doc.text("ANALYSIS REPORT", pageWidth / 2, pageHeight * 0.45, { align: "center" });
+      doc.text("EV CHARGING/SWAP STATIONS", pageWidth / 2, pageHeight * 0.45 + 12, { align: "center" });
 
       // Project name
       doc.setFontSize(18);
@@ -167,7 +167,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
       // Bottom branding
       doc.setFontSize(10);
       doc.setTextColor(...BRAND.gray500);
-      doc.text("Dibuat oleh SIVANA Platform", pageWidth / 2, pageHeight - 30, { align: "center" });
+      doc.text("Created by AMTHAL Platform", pageWidth / 2, pageHeight - 30, { align: "center" });
 
       // Bottom accent
       doc.setFillColor(...BRAND.lightBlue);
@@ -182,15 +182,15 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
       doc.setFontSize(18);
       doc.setTextColor(...BRAND.darkBlue);
       doc.setFont("helvetica", "bold");
-      doc.text("Ringkasan Eksekutif", MARGIN.left, yPos);
+      doc.text("Executive Summary", MARGIN.left, yPos);
 
       yPos += 15;
       doc.setFontSize(10);
       doc.setTextColor(...BRAND.gray700);
       doc.setFont("helvetica", "normal");
-      const summaryText = `Laporan ini menyajikan hasil analisis mendalam untuk proyek "${project.name}". ` +
-        `Tujuan utama adalah mengidentifikasi lokasi optimal untuk infrastruktur EV. ` +
-        `Analisis mencakup ${project.locations.length} lokasi kandidat dengan mempertimbangkan faktor permintaan, jaringan listrik, dan aksesibilitas.`;
+      const summaryText = `This report presents an in-depth analysis for the project "${project.name}". ` +
+        `The main objective is to identify optimal locations for EV infrastructure. ` +
+        `The analysis covers ${project.locations.length} candidate locations considering demand, power grid, and accessibility factors.`;
 
       const splitSummary = doc.splitTextToSize(summaryText, contentWidth);
       doc.text(splitSummary, MARGIN.left, yPos);
@@ -381,7 +381,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
             ["Produksi Tahunan", panelConfig.annual_production_kwh ? `${panelConfig.annual_production_kwh.toLocaleString('id-ID')} kWh` : '-'],
             ["Payback Period", roiAnalysis.payback_period_years ? `${roiAnalysis.payback_period_years.toFixed(1)} tahun` : '-'],
             ["ROI 25 Tahun", roiAnalysis.roi_25_years_percent ? `${roiAnalysis.roi_25_years_percent.toFixed(1)}%` : '-'],
-            ["Penghematan/Tahun", roiAnalysis.annual_savings_idr ? `Rp ${(roiAnalysis.annual_savings_idr / 1000000).toFixed(1)}M` : '-'],
+            ["Annual Savings", roiAnalysis.annual_savings_usd ? `$${(roiAnalysis.annual_savings_usd / 1000).toFixed(1)}K` : '-'],
           ];
 
           autoTable(doc, {
@@ -486,14 +486,14 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         // 2. Trigger Auto-Download Immediately
         const link = document.createElement('a');
         link.href = localUrl;
-        link.download = `Laporan_Analisis_${project.name.replace(/\s+/g, '_')}.pdf`;
+        link.download = `Report_Analysis_${project.name.replace(/\s+/g, '_')}.pdf`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
         // 3. Upload to Supabase Storage (Background)
         try {
-          const fileName = `Laporan_Analisis_${project.name.replace(/\s+/g, '_')}_${dateStr.replace(/\s+/g, '-')}.pdf`;
+          const fileName = `Report_Analysis_${project.name.replace(/\s+/g, '_')}_${dateStr.replace(/\s+/g, '-')}.pdf`;
           await ProjectReportsService.uploadReport(project.id, pdfBlob, fileName);
           // 4. Refresh reports list
           await loadReports();
@@ -502,7 +502,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         }
 
       } else {
-        alert("Gagal mengunggah laporan ke server.");
+        alert("Failed to upload report to server.");
         const localUrl = URL.createObjectURL(pdfBlob);
         setReportUrl(localUrl);
       }
@@ -521,10 +521,10 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
         {reportUrl ? (
           <a
             href={reportUrl}
-            download={`Laporan_Analisis_${project.name.replace(/\s+/g, '_')}.pdf`}
+            download={`Report_Analysis_${project.name.replace(/\s+/g, '_')}.pdf`}
             className="flex items-center gap-2 px-4 py-2 bg-[#134474] text-white rounded-lg hover:bg-[#0D263F] transition-colors shadow-sm font-semibold text-sm"
           >
-            <Download className="w-4 h-4" /> Unduh Laporan
+            <Download className="w-4 h-4" /> Download Report
           </a>
         ) : (
           <button
@@ -533,7 +533,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm font-semibold text-sm disabled:opacity-50"
           >
             {isGenerating ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
-            Buat Laporan
+            Generate Report
           </button>
         )}
       </div>
@@ -550,8 +550,8 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900">Opsi Laporan</h2>
-                  <p className="text-xs text-gray-500">Generate PDF baru atau unduh riwayat</p>
+                  <h2 className="text-xl font-bold text-gray-900">Report Options</h2>
+                  <p className="text-xs text-gray-500">Generate new PDF or download history</p>
                 </div>
               </div>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -565,7 +565,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
               {/* Historical Reports Section */}
               <div className="px-6 pt-4">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                  <History className="w-4 h-4 text-brand-primary" /> Riwayat Laporan
+                  <History className="w-4 h-4 text-brand-primary" /> Report History
                 </h3>
 
                 {isLoadingReports ? (
@@ -578,7 +578,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                           <p className="text-sm font-medium text-gray-700 truncate" title={rpt.name}>{rpt.name}</p>
                           <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                             <Clock className="w-3 h-3" />
-                            {new Date(rpt.created_at).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                            {new Date(rpt.created_at).toLocaleDateString("en-US", { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                             <span className="mx-1">•</span>
                             {(rpt.size_bytes / 1024).toFixed(0)} KB
                           </p>
@@ -586,7 +586,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                         <button
                           onClick={() => handleDownloadReport(rpt)}
                           className="p-2 text-brand-primary hover:bg-brand-primary/10 rounded-md transition-colors"
-                          title="Unduh PDF"
+                          title="Download PDF"
                         >
                           <Download className="w-4 h-4" />
                         </button>
@@ -595,7 +595,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                   </div>
                 ) : (
                   <div className="text-center py-4 bg-gray-50 rounded-lg border border-dashed border-gray-200 mb-6">
-                    <p className="text-xs text-gray-400">Belum ada riwayat laporan tersimpan.</p>
+                    <p className="text-xs text-gray-400">No saved report history yet.</p>
                   </div>
                 )}
               </div>
@@ -604,12 +604,12 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
 
               {/* Generate New Section */}
               <div className="px-6 pb-6">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Buat Laporan Baru</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Create New Report</h3>
 
                 <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
                   <div>
-                    <span className="font-medium text-gray-800">Sertakan Peta Lokasi</span>
-                    <p className="text-sm text-gray-500 mt-0.5">Menyertakan gambar peta visual untuk setiap lokasi.</p>
+                    <span className="font-medium text-gray-800">Include Location Maps</span>
+                    <p className="text-sm text-gray-500 mt-0.5">Include visual map images for each location.</p>
                   </div>
                   {/* Slider Toggle */}
                   <button
@@ -628,7 +628,7 @@ export const ReportGenerator = ({ project }: ReportGeneratorProps) => {
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors"
               >
-                Batal
+                Cancel
               </button>
               <button
                 onClick={() => generateReport(includeMaps)}

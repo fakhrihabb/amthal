@@ -10,8 +10,8 @@ export const SOLAR_CONFIG = {
     PANEL_DEGRADATION: 0.005,  // 0.5% per year
 
     // Indonesia specifics
-    ELECTRICITY_RATE_IDR_KWH: 1500,  // PLN residential rate (Rp/kWh)
-    INSTALLATION_COST_PER_M2_IDR: 1_500_000,  // Rp 1.5M/m² (including installation)
+    ELECTRICITY_RATE_USD_KWH: 0.10,  // Average US commercial rate ($/kWh)
+    INSTALLATION_COST_PER_M2_USD: 100,  // $100/m² (including installation)
 
     // Analysis parameters
     TERRAIN_SAMPLE_RADIUS_KM: 1,  // 1km radius for terrain sampling
