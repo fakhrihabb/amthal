@@ -32,7 +32,7 @@ export default function CandidateInfoWindow({
                 <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                         <MapPin className="w-5 h-5 text-orange-500" />
-                        <h3 className="font-semibold text-gray-800">Lokasi Kandidat</h3>
+                        <h3 className="font-semibold text-gray-800">Candidate Location</h3>
                     </div>
                     <button
                         onClick={onClose}
@@ -45,11 +45,11 @@ export default function CandidateInfoWindow({
                 {/* Details */}
                 <div className="space-y-2 text-sm mb-3">
                     <div>
-                        <span className="text-[#4b5563] block mb-1">Alamat:</span>
+                        <span className="text-[#4b5563] block mb-1">Address:</span>
                         <span className="text-[#1f2937]">{location.address}</span>
                     </div>
                     <div>
-                        <span className="text-[#4b5563] block mb-1">Koordinat:</span>
+                        <span className="text-[#4b5563] block mb-1">Coordinates:</span>
                         <span className="text-[#1f2937] font-mono text-xs">
                             {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
                         </span>
@@ -62,10 +62,10 @@ export default function CandidateInfoWindow({
                         onClick={onAnalyze}
                         disabled={isAnalyzing}
                         className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-[var(--color-light-blue)] text-white rounded text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                        title={isAnalyzing ? "Sedang menganalisis..." : "Analisis lokasi dengan AI"}
+                        title={isAnalyzing ? "Analyzing..." : "Analyze this location with AI"}
                     >
                         <BarChart3 className="w-3 h-3" />
-                        {isAnalyzing ? 'Menganalisis...' : 'Analisis'}
+                        {isAnalyzing ? 'Analyzing...' : 'Analyze'}
                     </button>
                     <button
                         onClick={onDelete}

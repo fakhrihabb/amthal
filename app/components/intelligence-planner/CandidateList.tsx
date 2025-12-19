@@ -22,10 +22,10 @@ export default function CandidateList({
                     <MapPin className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="font-semibold text-gray-700 mb-2">
-                    Belum Ada Lokasi Kandidat
+                    No Candidate Locations
                 </h3>
                 <p className="text-sm text-gray-500">
-                    Klik peta untuk menambahkan lokasi kandidat
+                    Click on the map to add a candidate location
                 </p>
             </div>
         );
@@ -38,10 +38,10 @@ export default function CandidateList({
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <MapPin size={20} className="text-white" />
-                        <h3 className="font-semibold text-white">Lokasi Kandidat</h3>
+                        <h3 className="font-semibold text-white">Candidate Locations</h3>
                     </div>
                     <span className="text-xs text-white/80 bg-white/20 px-2 py-1 rounded-full">
-                        {candidates.length} lokasi
+                        {candidates.length} locations
                     </span>
                 </div>
             </div>
@@ -64,7 +64,7 @@ export default function CandidateList({
                             {/* Info */}
                             <div className="flex-1 min-w-0">
                                 <h4 className="text-sm font-medium text-gray-900 mb-1">
-                                    Kandidat #{index + 1}
+                                    Candidate #{index + 1}
                                 </h4>
                                 <p className="text-xs text-gray-600 mb-1 truncate" title={candidate.address}>
                                     {candidate.address}
@@ -79,16 +79,16 @@ export default function CandidateList({
                                 <button
                                     onClick={() => onCandidateClick(candidate)}
                                     className="p-2 text-[var(--color-light-blue)] hover:bg-blue-50 rounded transition-colors"
-                                    aria-label="Navigasi ke lokasi"
-                                    title="Navigasi ke lokasi"
+                                    aria-label="Navigate to location"
+                                    title="Navigate to location"
                                 >
                                     <Navigation size={16} />
                                 </button>
                                 <button
                                     onClick={() => onCandidateRemove(candidate.id)}
                                     className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors"
-                                    aria-label="Hapus lokasi"
-                                    title="Hapus lokasi"
+                                    aria-label="Remove location"
+                                    title="Remove location"
                                 >
                                     <Trash2 size={16} />
                                 </button>

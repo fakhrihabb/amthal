@@ -20,8 +20,8 @@ export default function IntelligencePlannerClient() {
 
     // Layer visibility state
     const [layers, setLayers] = useState<LayerState>({
-        spklu: true,
-        spbklu: true,
+        charging_station: true,
+        battery_swap_station: true,
         candidates: true,
         poi: false, // POI layer starts disabled
     });
@@ -73,7 +73,14 @@ export default function IntelligencePlannerClient() {
                     return;
                 }
 
-                setStations(data.stations);
+                // Map API data to new English types
+                const mappedStations = (data.stations || []).map((s: any) => ({
+                    ...s,
+                    type: s.type === 'SPKLU' ? 'CHARGING_STATION' :
+                        s.type === 'SPBKLU' ? 'BATTERY_SWAP_STATION' : s.type
+                }));
+
+                setStations(mappedStations);
             } catch (error) {
                 console.error('Failed to fetch stations:', error);
             } finally {
@@ -95,7 +102,7 @@ export default function IntelligencePlannerClient() {
                 id: `candidate-${Date.now()}`,
                 latitude: lat,
                 longitude: lng,
-                address: 'Memuat alamat...',
+                address: 'Loading address...',
                 createdAt: new Date(),
             };
 
@@ -190,7 +197,7 @@ export default function IntelligencePlannerClient() {
 
         } catch (error) {
             console.error('Error analyzing location:', error);
-            alert('Gagal menganalisis lokasi. Silakan coba lagi.');
+            alert('Failed to analyze location. Please try again.');
         } finally {
             setIsAnalyzing(false);
         }
@@ -213,8 +220,8 @@ export default function IntelligencePlannerClient() {
 
     // Calculate station counts
     const stationCounts = {
-        spklu: stations.filter((s) => s.type === 'SPKLU').length,
-        spbklu: stations.filter((s) => s.type === 'SPBKLU').length,
+        charging_station: stations.filter((s) => s.type === 'CHARGING_STATION').length,
+        battery_swap_station: stations.filter((s) => s.type === 'BATTERY_SWAP_STATION').length,
         candidates: candidates.length,
     };
 
@@ -258,7 +265,7 @@ export default function IntelligencePlannerClient() {
                 />
                 {loading && (
                     <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-lg shadow-md">
-                        <p className="text-sm text-gray-600">Memuat stasiun...</p>
+                        <p className="text-sm text-gray-600">Loading stations...</p>
                     </div>
                 )}
             </div>

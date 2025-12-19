@@ -41,8 +41,8 @@ interface GoogleMapComponentProps {
     onPOICountChange?: (count: number) => void;
 }
 
-// Default center: DKI Jakarta
-const DEFAULT_CENTER = { lat: -6.2088, lng: 106.8456 };
+// Default center: Riyadh
+const DEFAULT_CENTER = { lat: 24.7136, lng: 46.6753 };
 const DEFAULT_ZOOM = 15; // Zoomed in for 3D effect
 
 export default function GoogleMapComponent({
@@ -111,8 +111,8 @@ export default function GoogleMapComponent({
 
     // Filter stations by type and layer visibility
     const visibleStations = stations.filter((station) => {
-        if (station.type === 'SPKLU') return layers.spklu;
-        if (station.type === 'SPBKLU') return layers.spbklu;
+        if (station.type === 'CHARGING_STATION') return layers.charging_station;
+        if (station.type === 'BATTERY_SWAP_STATION') return layers.battery_swap_station;
         return false;
     });
 
@@ -233,9 +233,9 @@ export default function GoogleMapComponent({
         return (
             <div className="flex items-center justify-center h-full bg-gray-100">
                 <div className="text-center p-4">
-                    <p className="text-red-600 font-semibold mb-2">Gagal memuat peta</p>
+                    <p className="text-red-600 font-semibold mb-2">Failed to load map</p>
                     <p className="text-gray-600 text-sm mb-2">
-                        Periksa koneksi internet dan API key Google Maps
+                        Check your internet connection and Google Maps API key
                     </p>
                     <pre className="text-xs text-red-500 bg-red-50 p-2 rounded max-w-md overflow-auto">
                         {JSON.stringify(loadError, null, 2)}
@@ -250,7 +250,7 @@ export default function GoogleMapComponent({
             <div className="flex items-center justify-center h-full bg-gray-100">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-[var(--color-light-blue)] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Memuat peta...</p>
+                    <p className="text-gray-600">Loading map...</p>
                 </div>
             </div>
         );
@@ -295,7 +295,7 @@ export default function GoogleMapComponent({
                         key={candidate.id}
                         position={{ lat: candidate.latitude, lng: candidate.longitude }}
                         icon={getMarkerIcon('CANDIDATE')}
-                        title="Lokasi Kandidat"
+                        title="Candidate Location"
                         onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
                     />
                 ))}
@@ -321,7 +321,7 @@ export default function GoogleMapComponent({
                         key={candidate.id}
                         position={{ lat: candidate.latitude, lng: candidate.longitude }}
                         icon={getMarkerIcon('CANDIDATE', candidate.analysisScore)}
-                        title="Lokasi Kandidat"
+                        title="Candidate Location"
                         onClick={() => onMarkerClick({ type: 'candidate', data: candidate })}
                     />
                 ))}

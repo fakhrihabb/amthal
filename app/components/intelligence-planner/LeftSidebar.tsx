@@ -12,8 +12,8 @@ interface LeftSidebarProps {
     layers: LayerState;
     onLayerToggle: (layer: keyof LayerState) => void;
     stationCounts: {
-        spklu: number;
-        spbklu: number;
+        charging_station: number;
+        battery_swap_station: number;
         candidates: number;
     };
     isAddingCandidate: boolean;
@@ -53,12 +53,12 @@ export default function LeftSidebar({
                         {/* Header with Toggle Button */}
                         <div className="relative mb-2">
                             <h2 className="text-lg font-semibold text-gray-800 text-center">
-                                Kontrol Peta
+                                Map Controls
                             </h2>
                             <button
                                 onClick={onToggle}
                                 className="absolute right-0 top-0 w-8 h-8 border-2 border-[var(--color-light-blue)] rounded-lg flex items-center justify-center hover:bg-[var(--color-light-blue)] hover:text-white transition-all group"
-                                aria-label="Tutup sidebar"
+                                aria-label="Close sidebar"
                             >
                                 <ChevronLeft className="w-4 h-4 text-[var(--color-light-blue)] group-hover:text-white" />
                             </button>
@@ -75,12 +75,12 @@ export default function LeftSidebar({
                                     }`}
                             >
                                 <Plus className="w-4 h-4" />
-                                {isAddingCandidate ? 'Klik Peta untuk Menambah' : 'Tambah Lokasi Kandidat'}
+                                {isAddingCandidate ? 'Click Map to Add' : 'Add Candidate Location'}
                             </button>
 
                             {isAddingCandidate && (
                                 <p className="text-xs text-orange-600 mt-2 text-center animate-pulse">
-                                    Klik lokasi di peta untuk menambahkan kandidat
+                                    Click a location on the map to add a candidate
                                 </p>
                             )}
                         </div>
@@ -88,40 +88,40 @@ export default function LeftSidebar({
                         {/* Layer Toggles */}
                         <div className="glass-panel p-4 rounded-lg">
                             <h3 className="text-sm font-medium text-gray-700 mb-3">
-                                Layer Peta
+                                Map Layers
                             </h3>
                             <div className="space-y-3">
-                                {/* SPKLU Layer */}
+                                {/* Charging Station Layer */}
                                 <label className="flex items-center justify-between cursor-pointer group">
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
-                                            checked={layers.spklu}
-                                            onChange={() => onLayerToggle('spklu')}
+                                            checked={layers.charging_station}
+                                            onChange={() => onLayerToggle('charging_station')}
                                             className="w-4 h-4 text-blue-500 rounded focus:ring-2 focus:ring-blue-500"
                                         />
                                         <Zap className="w-4 h-4 text-blue-500" />
-                                        <span className="text-sm text-gray-700">SPKLU</span>
+                                        <span className="text-sm text-gray-700">Charging Station</span>
                                     </div>
                                     <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                        {stationCounts.spklu}
+                                        {stationCounts.charging_station}
                                     </span>
                                 </label>
 
-                                {/* SPBKLU Layer */}
+                                {/* Battery Swap Station Layer */}
                                 <label className="flex items-center justify-between cursor-pointer group">
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
-                                            checked={layers.spbklu}
-                                            onChange={() => onLayerToggle('spbklu')}
+                                            checked={layers.battery_swap_station}
+                                            onChange={() => onLayerToggle('battery_swap_station')}
                                             className="w-4 h-4 text-green-500 rounded focus:ring-2 focus:ring-green-500"
                                         />
                                         <Battery className="w-4 h-4 text-green-500" />
-                                        <span className="text-sm text-gray-700">SPBKLU</span>
+                                        <span className="text-sm text-gray-700">Battery Swap Station</span>
                                     </div>
                                     <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                        {stationCounts.spbklu}
+                                        {stationCounts.battery_swap_station}
                                     </span>
                                 </label>
 
@@ -135,7 +135,7 @@ export default function LeftSidebar({
                                             className="w-4 h-4 text-orange-500 rounded focus:ring-2 focus:ring-orange-500"
                                         />
                                         <MapPin className="w-4 h-4 text-orange-500" />
-                                        <span className="text-sm text-gray-700">Kandidat</span>
+                                        <span className="text-sm text-gray-700">Candidates</span>
                                     </div>
                                     <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
                                         {stationCounts.candidates}
@@ -161,12 +161,12 @@ export default function LeftSidebar({
                         {/* Info */}
                         <div className="glass-panel p-4 rounded-lg">
                             <h3 className="text-sm font-medium text-gray-700 mb-2">
-                                Petunjuk
+                                Instructions
                             </h3>
                             <ul className="text-xs text-gray-600 space-y-1">
-                                <li>• Klik peta untuk menambah lokasi kandidat</li>
-                                <li>• Klik marker untuk melihat detail</li>
-                                <li>• Toggle layer untuk show/hide marker</li>
+                                <li>• Click map to add candidate location</li>
+                                <li>• Click marker to view details</li>
+                                <li>• Toggle layers to show/hide markers</li>
                             </ul>
                         </div>
                     </div>
@@ -175,7 +175,7 @@ export default function LeftSidebar({
                         <button
                             onClick={onToggle}
                             className="w-8 h-8 border-2 border-[var(--color-light-blue)] rounded-lg flex items-center justify-center hover:bg-[var(--color-light-blue)] hover:text-white transition-all group"
-                            aria-label="Buka sidebar"
+                            aria-label="Open sidebar"
                         >
                             <ChevronRight className="w-4 h-4 text-[var(--color-light-blue)] group-hover:text-white" />
                         </button>

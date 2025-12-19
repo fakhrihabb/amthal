@@ -16,7 +16,7 @@ export default function LocationSelectionPanel({
     onAnalyze,
     onClose
 }: LocationSelectionPanelProps) {
-    const [address, setAddress] = useState<string>('Memuat alamat...');
+    const [address, setAddress] = useState<string>('Loading address...');
     const [isLoadingAddress, setIsLoadingAddress] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -35,7 +35,7 @@ export default function LocationSelectionPanel({
                 setAddress(result);
             } catch (error) {
                 console.error('Error fetching address:', error);
-                setAddress('Alamat tidak ditemukan');
+                setAddress('Address not found');
             } finally {
                 setIsLoadingAddress(false);
             }
@@ -66,12 +66,12 @@ export default function LocationSelectionPanel({
                 <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-2">
                         <MapPin className="w-5 h-5 text-[var(--color-light-blue)]" />
-                        <h3 className="font-semibold text-gray-900">Lokasi Terpilih</h3>
+                        <h3 className="font-semibold text-gray-900">Selected Location</h3>
                     </div>
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors p-1"
-                        aria-label="Tutup"
+                        aria-label="Close"
                     >
                         <X size={18} />
                     </button>
@@ -79,7 +79,7 @@ export default function LocationSelectionPanel({
 
                 {/* Coordinates */}
                 <div className="mb-3">
-                    <p className="text-xs text-gray-500 mb-1">Koordinat:</p>
+                    <p className="text-xs text-gray-500 mb-1">Coordinates:</p>
                     <div className="flex items-center justify-between gap-2">
                         <p className="text-sm font-mono text-gray-700">
                             {formatCoordinates(location.lat, location.lng)}
@@ -87,17 +87,17 @@ export default function LocationSelectionPanel({
                         <button
                             onClick={handleCopyCoordinates}
                             className="flex items-center gap-1 px-2 py-1 text-xs text-[var(--color-light-blue)] hover:bg-blue-50 rounded transition-colors"
-                            aria-label="Salin koordinat"
+                            aria-label="Copy coordinates"
                         >
                             {copied ? (
                                 <>
                                     <CheckCircle2 size={14} />
-                                    <span>Tersalin!</span>
+                                    <span>Copied!</span>
                                 </>
                             ) : (
                                 <>
                                     <Copy size={14} />
-                                    <span>Salin</span>
+                                    <span>Copy</span>
                                 </>
                             )}
                         </button>
@@ -106,11 +106,11 @@ export default function LocationSelectionPanel({
 
                 {/* Address */}
                 <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-1">Alamat:</p>
+                    <p className="text-xs text-gray-500 mb-1">Address:</p>
                     {isLoadingAddress ? (
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                             <Loader2 className="w-4 h-4 animate-spin" />
-                            <span>Memuat alamat...</span>
+                            <span>Loading address...</span>
                         </div>
                     ) : (
                         <p className="text-sm text-gray-700">{address}</p>
@@ -123,13 +123,13 @@ export default function LocationSelectionPanel({
                         onClick={onAnalyze}
                         className="flex-1 bg-[var(--color-light-blue)] text-white px-4 py-2 rounded-lg font-medium text-sm hover:opacity-90 transition-opacity"
                     >
-                        Analisis Lokasi Ini
+                        Analyze This Location
                     </button>
                     <button
                         onClick={onClose}
                         className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors"
                     >
-                        Tutup
+                        Close
                     </button>
                 </div>
             </div>

@@ -55,7 +55,7 @@ export default function POIInfoWindow({
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-gray-600 transition-colors p-1"
-                        aria-label="Tutup"
+                        aria-label="Close"
                     >
                         <X size={16} />
                     </button>
@@ -75,7 +75,7 @@ export default function POIInfoWindow({
                 <div className="flex items-start gap-2 mb-2">
                     <MapPin size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-gray-600 line-clamp-2">
-                        {poi.address || 'Alamat tidak tersedia'}
+                        {poi.address || 'Address not available'}
                     </p>
                 </div>
 
@@ -84,7 +84,7 @@ export default function POIInfoWindow({
                     <div className="mt-3 pt-3 border-t border-gray-200">
                         <div className="flex items-center justify-between">
                             <span className="text-xs text-gray-500">
-                                Jarak dari kandidat:
+                                Distance from candidate:
                             </span>
                             <span className="text-sm font-semibold text-[var(--color-light-blue)]">
                                 {formatDistance(distance)}
@@ -96,7 +96,7 @@ export default function POIInfoWindow({
                 {!candidateLocation && (
                     <div className="mt-3 pt-3 border-t border-gray-200">
                         <p className="text-xs text-gray-400 italic">
-                            Tambahkan lokasi kandidat untuk melihat jarak
+                            Add candidate location to see distance
                         </p>
                     </div>
                 )}
